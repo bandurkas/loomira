@@ -1,63 +1,47 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
 @import "tailwindcss";
 
 @theme {
-  /* MASTER Design System: Elite Bestseller Light (Minimal Beige / White / Soft Blue) */
-  --color-bg: #FCFBF9; /* Light, luxury beige/cream */
-  --color-card: #FFFFFF;
-  --color-border: rgba(0, 0, 0, 0.06);
-  --color-accent: #2E7D32; /* Rich Green for conversions */
-  --color-accent-light: #4CAF50;
-  --color-accent-blue: #E1F5FE; /* Soft blue touch */
-  --color-text-p: #2D3436; /* Crisp dark slate */
-  --color-text-s: #636E72; /* Muted stone */
+  /* ── Color System ─────────────────── */
+  --color-cream:      #F5F3EE;
+  --color-white:      #FFFFFF;
+  --color-ink:        #0E0E0E;
+  --color-ink-2:      #6B6860;
+  --color-sage:       #3B6B4A;
+  --color-sage-light: #ECF0EB;
+  --color-border:     rgba(14, 14, 14, 0.07);
 
-  /* Typography Pairing */
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Playfair Display", ui-serif, Georgia, serif;
-
-  /* Spacing */
-  --spacing-container: 2rem;
-  --spacing-section: 6rem;
+  /* ── Typography ───────────────────── */
+  --font-sans:    "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cormorant Garamond", ui-serif, Georgia, serif;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    @apply antialiased;
-  }
-  
-  body {
-    @apply bg-bg text-text-p font-sans selection:bg-accent selection:text-white;
-    background-image: 
-      radial-gradient(circle at 50% 0%, rgba(225, 245, 254, 0.4) 0%, transparent 60%),
-      url("https://www.transparenttextures.com/patterns/cream-dust.png");
-    background-attachment: fixed;
   }
 
-  /* Custom Scrollbar */
+  body {
+    @apply bg-cream text-ink font-sans antialiased;
+  }
+
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
   }
   ::-webkit-scrollbar-track {
-    background: #FAFAFA;
+    background: var(--color-cream);
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--color-accent);
+    background: rgba(14, 14, 14, 0.18);
     border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(14, 14, 14, 0.35);
   }
 }
 
 @layer utilities {
-  .glass {
-    @apply backdrop-blur-2xl bg-white/[0.6] border border-black/[0.04];
-  }
-  
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-br from-text-p via-text-p to-text-s/70;
-  }
-
-  .shadow-premium {
-    box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.05), 0 0 40px rgba(46, 125, 50, 0.02);
+  .font-display {
+    font-family: var(--font-display);
   }
 }

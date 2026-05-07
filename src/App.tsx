@@ -1,522 +1,702 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ShoppingCart, 
-  ShieldCheck, 
-  Wind, 
-  Timer, 
-  MapPin, 
-  Check, 
-  Star, 
-  X,
-  Package,
-  Activity,
-  ArrowRight,
-  Flame,
-  ThumbsUp,
-  RefreshCw,
-  ShoppingBag
-} from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { Star, ShieldCheck, Wind, Check, X, ArrowRight, Package, RefreshCw } from 'lucide-react';
 
-// --- ANIMATION VARIANTS ---
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1,
-    transition: { staggerChildren: 0.12, delayChildren: 0.1 }
-  }
-};
+const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-const itemVariants = {
-  hidden: { y: 24, opacity: 0 },
-  visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
-};
+function Reveal({
+  children,
+  delay = 0,
+  className = '',
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: '0px 0px -60px 0px' });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 28 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.75, ease: EASE, delay }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+const FEATURES = [
+  {
+    icon: Wind,
+    title: 'Sirkulasi 360°',
+    desc: 'Rajutan berpori mikro mengalirkan udara terus-menerus. Kaki sejuk dari pagi hingga malam.',
+  },
+  {
+    icon: ShieldCheck,
+    title: '85% Katun Premium',
+    desc: 'Alami dan lembut bahkan di kulit sensitif. Tidak gatal, terasa seperti tidak memakai apa pun.',
+  },
+  {
+    icon: RefreshCw,
+    title: 'Karet Bebas Bekas',
+    desc: 'Elastis ekstra-lembut yang mengikuti bentuk kaki tanpa meninggalkan bekas di mata kaki.',
+  },
+  {
+    icon: Package,
+    title: 'Jahitan Ganda',
+    desc: 'Tumit dan ujung diperkuat double-stitch. Tahan lama meski dipakai dan dicuci berkali-kali.',
+  },
+];
+
+const REVIEWS = [
+  {
+    name: 'Andi Setiawan',
+    city: 'Jakarta',
+    text: 'Akhirnya ada kaos kaki yang tidak membuat saya ingin melepas sepatu saat tengah hari. Ventilasi udaranya nyata — ini bukan sekadar klaim.',
+  },
+  {
+    name: 'Siti Rahayu',
+    city: 'Surabaya',
+    text: 'Saya berjalan 10.000 langkah setiap hari. Kaos kaki ini luar biasa — tidak ada rasa menjepit dan kaki tetap kering sepanjang hari.',
+  },
+  {
+    name: 'Budi Hartono',
+    city: 'Bandung',
+    text: 'Sangat lembut dan tidak gerah. Karet atasnya pas sempurna. Saya langsung pesan 10 pasang untuk setahun ke depan.',
+  },
+];
+
+const COMPARISON = [
+  'Sirkulasi Udara Mikro 360°',
+  '85% Katun Premium',
+  'Jahitan Ganda Tumit & Ujung',
+  'Cepat Kering & Anti Melar',
+  'Karet Bebas Meninggalkan Bekas',
+];
+
+const BUNDLES = [
+  { id: '3', label: 'Starter', pairs: '3 Pasang', price: '50.000', original: '60.000', save: 'Hemat 15%' },
+  { id: '5', label: 'Paling Populer', pairs: '5 Pasang', price: '70.000', original: '100.000', save: 'Hemat 30%', featured: true },
+  { id: '10', label: 'Best Value', pairs: '10 Pasang', price: '130.000', original: '200.000', save: 'Hemat 40%' },
+];
+
+const GALLERY = [
+  { src: '/real_assets/b_4_opt.jpg', alt: 'Ankle fit' },
+  { src: '/real_assets/b_3_opt.jpg', alt: 'Material detail' },
+  { src: '/real_assets/All_in_one.png', alt: 'All colors' },
+  { src: '/real_assets/b_4.png', alt: 'Premium texture' },
+  { src: '/real_assets/pack_opt.jpg', alt: 'Bundle pack' },
+  { src: '/real_assets/b_6.png', alt: 'Lifestyle shot' },
+];
 
 export default function App() {
-  const [stock, setStock] = useState(87);
-  const [selectedBundle, setSelectedBundle] = useState('5-pairs');
-  const [selectedSize, setSelectedSize] = useState('M');
-  const [selectedColor, setSelectedColor] = useState('Black');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [bundle, setBundle] = useState('5');
+  const [size, setSize] = useState('M');
+  const [color, setColor] = useState('Black');
+  const [modal, setModal] = useState(false);
 
-  useEffect(() => {
-    // Ethically dynamic stock counter
-    const interval = setInterval(() => {
-      setStock(prev => (prev > 12 ? prev - 1 : prev));
-    }, 45000);
-    return () => clearInterval(interval);
-  }, []);
+  const selected = BUNDLES.find((b) => b.id === bundle)!;
+  const waMsg = encodeURIComponent(
+    `Halo Lomira, saya ingin memesan ${selected.pairs} kaos kaki premium. Ukuran: ${size}. Warna: ${color}.`
+  );
+  const waUrl = `https://wa.me/6281284477068?text=${waMsg}`;
 
   return (
-    <div className="min-h-screen bg-bg text-text-p font-sans antialiased pb-24 selection:bg-accent selection:text-white relative">
-      
-      {/* 1. TOP BAR / SCARCITY HEADER */}
-      <div className="w-full bg-accent text-white py-2.5 px-4 text-center text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2.5 z-50">
-        <Flame size={14} className="animate-pulse shrink-0" /> 
-        <span>Hanya Hari Ini: Gratis Ongkir untuk Semua Pesanan • Promo Spesial Berakhir Malam Ini</span>
+    <div className="min-h-screen bg-cream text-ink font-sans antialiased selection:bg-ink selection:text-cream">
+
+      {/* ── ANNOUNCEMENT BAR ─────────────────────────── */}
+      <div className="bg-ink text-cream/55 text-center py-2.5 text-[11px] tracking-[0.22em] uppercase font-medium">
+        Gratis Ongkir Seluruh Indonesia&nbsp;&nbsp;·&nbsp;&nbsp;Hari Ini Saja
       </div>
 
-      {/* 2. NAVIGATION */}
-      <nav className="w-full border-b border-border/60 bg-white/70 backdrop-blur-md px-6 py-3 md:py-4 flex justify-between items-center sticky top-0 z-40">
-        <div className="flex items-center gap-3 hover:opacity-85 transition-opacity cursor-pointer">
-          <img src="/logo_opt.png" alt="Lomira Product" className="h-14 md:h-20 w-auto object-contain" fetchpriority="high" decoding="sync" />
-          <span className="text-[9px] font-extrabold bg-accent/10 text-accent px-2 py-0.5 rounded-md tracking-wider">OFFICIAL</span>
-        </div>
-        <div className="flex items-center gap-6">
-          <a href="#problem" className="text-xs font-bold uppercase tracking-wider text-text-s hover:text-text-p transition-colors hidden sm:inline-block">Mengapa Kami</a>
-          <a href="#reviews" className="text-xs font-bold uppercase tracking-wider text-text-s hover:text-text-p transition-colors hidden sm:inline-block">Ulasan</a>
-          <a href="#pricing" className="bg-[#1E293B] text-white text-xs font-black uppercase tracking-wider px-6 py-3 rounded-full hover:bg-black transition-all shadow-md flex items-center gap-2 hover:scale-105">
-            <ShoppingBag size={14} /> Beli 5 Pasang
-          </a>
-        </div>
-      </nav>
-
-      {/* MAIN LAYOUT */}
-      <motion.main 
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="max-w-[1240px] mx-auto px-6 pt-12 md:pt-20 space-y-32"
-      >
-        
-        {/* 3. HERO SECTION */}
-        <section className="relative grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center min-h-[65vh]">
-          <motion.div variants={itemVariants} className="lg:col-span-6 flex flex-col items-start gap-6">
-            <div className="inline-flex items-center gap-2.5 bg-blue-50 border border-blue-100 px-4 py-1.5 rounded-full">
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-              </span>
-              <span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Kaki Gerah & Berkeringat? Tidak Lagi</span>
-            </div>
-
-            <h1 className="text-5xl md:text-7xl font-black tracking-tighter leading-[0.9] text-text-p uppercase italic">
-              BYE-BYE KAKI GERAH<br/>
-              <span className="text-accent font-display not-italic font-bold tracking-tight">NYAMAN</span> SEHARIAN.
-            </h1>
-
-            <p className="max-w-xl text-lg md:text-xl text-text-s font-medium leading-relaxed">
-              Kaos kaki pendek <span className="font-bold text-text-p">Lomira Air Mesh</span> menjaga kaki tetap sejuk, kering, dan nyaman sepanjang hari. Terbuat dari katun premium 85%, ventilasi 360°, dan pas tanpa rasa menjepit.
-            </p>
-
-            {/* CTAs */}
-            <div className="w-full sm:w-auto flex flex-col sm:flex-row items-center gap-4 pt-4">
-              <a 
-                href="#pricing"
-                className="w-full sm:w-auto bg-accent text-white px-10 py-5 rounded-2xl font-black uppercase text-base tracking-wide flex items-center justify-center gap-3 hover:bg-accent/90 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-accent/20 cursor-pointer"
-              >
-                Beli 5 Pasang – Rp 70.000 ⚡
-              </a>
-              <a 
-                href="#problem"
-                className="w-full sm:w-auto bg-white text-text-p border border-border px-8 py-5 rounded-2xl font-black uppercase text-xs tracking-wider text-center flex items-center justify-center gap-2 hover:bg-slate-50 transition-all"
-              >
-                Pelajari Lebih Lanjut
-              </a>
-            </div>
-
-            <div className="flex items-center gap-5 border-t border-border/80 w-full pt-6 mt-2">
-              <div className="flex items-center gap-1.5">
-                {[1, 2, 3, 4, 5].map(i => <Star key={i} size={15} className="fill-amber-400 text-amber-400" />)}
-              </div>
-              <span className="text-xs font-bold text-text-s">4.9/5 dari 5.000+ pembeli terverifikasi</span>
-            </div>
-          </motion.div>
-
-          <motion.div variants={itemVariants} className="lg:col-span-6 flex justify-center relative">
-            <div className="absolute inset-0 bg-blue-100/40 blur-[120px] rounded-full scale-90 -z-10"></div>
-            <img 
-              src="/lomira_hero_ankle_5pack_opt.png"
-              alt="Paket Kaos Kaki Pendek Lomira"
+      {/* ── NAVIGATION ───────────────────────────────── */}
+      <header className="sticky top-0 z-50 border-b border-border bg-cream/90 backdrop-blur-xl">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 flex items-center justify-between h-[60px]">
+          <a href="#">
+            <img
+              src="/logo_opt.png"
+              alt="Lomira"
+              className="h-9 sm:h-11 w-auto"
               fetchpriority="high"
               decoding="sync"
-              className="w-full max-w-[480px] h-auto object-contain drop-shadow-[0_45px_70px_rgba(0,0,0,0.14)] select-none hover:scale-102 transition-transform duration-700"
+            />
+          </a>
+          <nav className="hidden md:flex items-center gap-8">
+            {([['Keunggulan', '#features'], ['Ulasan', '#reviews'], ['Harga', '#pricing']] as const).map(([label, href]) => (
+              <a key={href} href={href} className="text-[12px] font-medium text-ink/40 hover:text-ink transition-colors tracking-wide">
+                {label}
+              </a>
+            ))}
+          </nav>
+          <a
+            href="#pricing"
+            className="text-[12px] font-semibold bg-ink text-cream px-5 py-2.5 rounded-full hover:bg-ink/80 transition-colors"
+          >
+            Beli Sekarang
+          </a>
+        </div>
+      </header>
+
+      {/* ── HERO ─────────────────────────────────────── */}
+      <section className="relative overflow-hidden min-h-[92vh] flex items-center">
+        <div className="absolute inset-0 bg-gradient-to-br from-cream via-cream to-sage-light/50 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-sage/5 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative max-w-6xl mx-auto px-5 sm:px-8 w-full py-24 md:py-32 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+
+          {/* Copy */}
+          <div className="order-2 lg:order-1 space-y-9">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, ease: EASE }}
+              className="space-y-7"
+            >
+              <span className="inline-flex items-center gap-2.5 text-[11px] font-medium tracking-[0.18em] uppercase text-ink/40 border border-border rounded-full px-4 py-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-sage animate-pulse" />
+                Premium Ankle Socks
+              </span>
+
+              <h1 className="font-display text-[clamp(3.2rem,7vw,5.8rem)] leading-[1.0] text-ink">
+                Kaki Sejuk.<br />
+                <em>Seharian.</em>
+              </h1>
+
+              <p className="text-[15px] md:text-[16px] text-ink/50 leading-[1.8] max-w-[420px]">
+                Rajutan 85% katun premium dengan ventilasi 360°. Menjaga kaki
+                tetap sejuk, kering, dan bebas bau — dari pagi hingga malam.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: EASE, delay: 0.18 }}
+              className="flex flex-col sm:flex-row gap-3"
+            >
+              <a
+                href={waUrl}
+                target="_blank"
+                className="group bg-ink text-cream px-8 py-4 rounded-full font-semibold text-[14px] tracking-wide hover:bg-ink/85 transition-all flex items-center justify-center gap-2.5"
+              >
+                Beli 5 Pasang — Rp 70.000
+                <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-200" />
+              </a>
+              <a
+                href="#features"
+                className="px-8 py-4 rounded-full font-semibold text-[14px] tracking-wide border border-border hover:bg-ink/5 transition-all flex items-center justify-center text-ink/55"
+              >
+                Pelajari Lebih
+              </a>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.35 }}
+              className="flex items-center gap-4"
+            >
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={12} className="fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <span className="text-[12px] text-ink/38 font-medium">4.9 · 5.000+ pembeli terverifikasi</span>
+            </motion.div>
+          </div>
+
+          {/* Product Image */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.97, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1.1, ease: EASE }}
+            className="order-1 lg:order-2 flex justify-center items-center relative"
+          >
+            <div className="absolute w-3/4 h-3/4 bg-sage/12 rounded-full blur-3xl" />
+            <img
+              src="/lomira_hero_ankle_5pack_opt.png"
+              alt="Lomira Premium Ankle Socks 5 Pack"
+              fetchpriority="high"
+              decoding="sync"
+              className="relative w-full max-w-[380px] lg:max-w-[480px] h-auto object-contain drop-shadow-[0_48px_96px_rgba(0,0,0,0.13)] hover:scale-[1.02] transition-transform duration-700"
             />
           </motion.div>
-        </section>
+        </div>
+      </section>
 
-        {/* 4. PROBLEM AWARENESS SECTION */}
-        <section id="problem" className="bg-white border border-border rounded-[3.5rem] p-10 md:p-16 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-5 space-y-6">
-            <div className="inline-flex items-center gap-2 text-accent-light bg-accent/5 px-3 py-1 rounded-full font-bold text-[10px] uppercase tracking-wider">Masalah</div>
-            <h2 className="text-3xl md:text-5xl font-black text-text-p italic tracking-tighter uppercase leading-[1]">Pernahkah Kaki Anda<br/>Terasa Terbakar?</h2>
-            <p className="text-base text-text-s leading-relaxed font-medium">
-              Mari kita jujur. Menjelang tengah hari, kaki Anda terasa seperti dimasak di dalam sepatu. Keringat menumpuk. Bau tak sedap muncul. Dan kaos kaki murah Anda? Melar dan tipis setelah dua kali pencucian.
-            </p>
-            <p className="text-base text-text-p leading-relaxed font-extrabold italic">
-              Anda tidak perlu memikirkan kaos kaki Anda lagi. Seharusnya kaos kaki bekerja secara otomatis untuk kenyamanan Anda.
-            </p>
-          </div>
-
-          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="p-8 bg-slate-50 rounded-3xl border border-slate-100 space-y-3">
-              <X className="text-rose-500" size={24} />
-              <h4 className="text-lg font-black uppercase text-text-p">Kaos Kaki Biasa</h4>
-              <p className="text-sm text-text-s font-medium leading-relaxed">Sirkulasi buruk, panas, berkeringat, cepat melar, dan membuat kaki lecet.</p>
-            </div>
-            <div className="p-8 bg-accent/5 rounded-3xl border border-accent/10 space-y-3">
-              <Check className="text-accent" size={24} />
-              <h4 className="text-lg font-black uppercase text-accent">Lomira Air Mesh</h4>
-              <p className="text-sm text-text-s font-medium leading-relaxed">Ventilasi 360°, cepat kering, katun premium ramah kulit, dan tahan lama.</p>
-            </div>
-          </div>
-        </section>
-
-        {/* 5. PRODUCT AS SOLUTION (BENEFIT BLOCKS) */}
-        <section className="space-y-12">
-          <div className="text-center max-w-2xl mx-auto space-y-4">
-            <span className="text-[10px] font-black text-accent-light uppercase tracking-[0.3em]">Mengapa Lomira Berbeda</span>
-            <h2 className="text-4xl md:text-6xl font-black text-text-p tracking-tighter uppercase leading-[0.9] italic">Keunggulan Lomira</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* ── TRUST STRIP ──────────────────────────────── */}
+      <Reveal>
+        <div className="border-y border-border bg-white">
+          <div className="max-w-6xl mx-auto px-5 sm:px-8 grid grid-cols-2 md:grid-cols-4">
             {[
-              { i: Wind, t: "Sirkulasi Udara 360°", d: "Zona ventilasi mikro menjaga udara terus mengalir agar kaki tetap sejuk." },
-              { i: ShieldCheck, t: "85% Katun Premium", d: "Tekstur super lembut, sangat sejuk, dan ramah di kulit sensitif." },
-              { i: ThumbsUp, t: "Karet Lembut Tidak Ketat", d: "Pas di kaki seharian tanpa rasa sakit atau membekas di mata kaki." },
-              { i: Timer, t: "Ujung & Tumit Kuat", d: "Jahitan ganda ekstra kuat, menjamin tidak mudah berlubang." }
-            ].map((benefit, idx) => (
-              <div key={idx} className="bg-white border border-border p-8 rounded-[2.5rem] flex flex-col gap-6 hover:border-accent/30 transition-all shadow-premium hover:-translate-y-1 group duration-500">
-                <div className="w-14 h-14 rounded-2xl bg-accent/5 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all">
-                  <benefit.i size={28} />
-                </div>
-                <div>
-                  <h3 className="text-xl font-black text-text-p uppercase italic tracking-tighter mb-2">{benefit.t}</h3>
-                  <p className="text-sm text-text-s font-medium leading-relaxed">{benefit.d}</p>
-                </div>
+              { stat: '5.000+', label: 'Pembeli Puas' },
+              { stat: '4.9 ★', label: 'Rating Rata-rata' },
+              { stat: '10 Hari', label: 'Garansi Nyaman' },
+              { stat: 'Gratis', label: 'Ongkir Hari Ini' },
+            ].map((item, i) => (
+              <div
+                key={item.label}
+                className="flex flex-col items-center gap-1.5 py-7 px-4 border-r border-b md:border-b-0 last:border-r-0 border-border text-center"
+              >
+                <span className="font-display text-[1.65rem] font-semibold text-ink">{item.stat}</span>
+                <span className="text-[10px] tracking-[0.18em] uppercase text-ink/35 font-medium">{item.label}</span>
               </div>
             ))}
           </div>
-        </section>
+        </div>
+      </Reveal>
 
-        {/* 6. VISUAL PROOF & LIFESTYLE EXHIBIT */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-8">
-          <div className="lg:col-span-7 bg-white border border-border rounded-[3.5rem] overflow-hidden min-h-[500px] relative group flex items-center justify-center shadow-premium">
-            <img 
-              src="/real_assets/b_4_opt.jpg" 
-              loading="lazy"
-              decoding="async"
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105" 
-              alt="Lomira Ankle Fit" 
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-12 flex flex-col justify-end items-start text-left">
-              <span className="text-[10px] font-black text-accent-light uppercase tracking-[0.4em] mb-4">Pas di Bawah Mata Kaki</span>
-              <h3 className="text-4xl md:text-5xl font-black text-white uppercase italic tracking-tighter mb-2">Potongan Pendek.<br/>Tidak Menjepit.</h3>
-              <p className="text-base text-white/70 max-w-sm">Nyaman untuk sepatu kets, loafers, atau sepatu kerja.</p>
-            </div>
-          </div>
+      <main className="max-w-6xl mx-auto px-5 sm:px-8 pb-28 md:pb-0">
 
-          <div className="lg:col-span-5 grid grid-cols-1 gap-6">
-            <div className="bg-white border border-border p-6 md:p-8 rounded-[2.5rem] flex items-center gap-6 shadow-premium hover:border-accent/30 transition-all">
-              <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden bg-slate-50 flex items-center justify-center border border-border shrink-0">
-                <img src="/real_assets/b_3_opt.jpg" loading="lazy" decoding="async" className="w-full h-full object-cover select-none" alt="Air Mesh Anti Gerah" />
-              </div>
-              <div className="flex-1">
-                <h4 className="text-xl font-black uppercase text-text-p italic tracking-tight">Air Mesh Anti Gerah</h4>
-                <p className="text-sm text-text-s font-medium leading-relaxed mt-1">Teknologi sirkulasi udara rajutan berpori mikro yang cepat membuang kelembapan. Kaki Anda tetap adem seharian.</p>
-              </div>
-            </div>
-
-            <div className="bg-white border border-border p-6 md:p-8 rounded-[2.5rem] flex items-center gap-6 shadow-premium hover:border-accent/30 transition-all">
-              <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden bg-slate-50 flex items-center justify-center border border-border shrink-0">
-                <img src="/real_assets/pack_opt.jpg" loading="lazy" decoding="async" className="w-full h-full object-cover select-none" alt="5 Pasang Hemat" />
-              </div>
-              <div className="flex-1">
-                <h4 className="text-xl font-black uppercase text-text-p italic tracking-tight">Paket Hemat</h4>
-                <p className="text-sm text-text-s font-medium leading-relaxed mt-1">Paket hemat 5 pasang dengan kualitas rajutan tinggi yang awet, nyaman, dan ramah di kulit.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 7. SOCIAL PROOF (REAL REVIEWS) */}
-        <section id="reviews" className="space-y-12 bg-slate-50/50 border border-border rounded-[3.5rem] p-10 md:p-16">
-          <div className="text-center max-w-2xl mx-auto space-y-4">
-            <span className="text-[10px] font-black text-accent-light uppercase tracking-[0.3em]">Kepuasan Pelanggan</span>
-            <h2 className="text-4xl md:text-6xl font-black text-text-p tracking-tighter uppercase leading-[0.9] italic">Ulasan Pembeli</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { n: "Andi S.", v: "Pembeli Terverifikasi", t: "Akhirnya ada kaos kaki yang tidak membuat saya ingin melepas sepatu saat tengah hari. Teknologi sirkulasi udaranya nyata." },
-              { n: "Siti R.", v: "Pembeli Terverifikasi", t: "Saya berjalan 10.000 langkah setiap hari untuk bekerja. Kaos kaki ini sangat kuat tanpa rasa menjepit sedikit pun." },
-              { n: "Budi H.", v: "Pembeli Terverifikasi", t: "Sangat lembut dan tidak gerah sama sekali. Karet atasnya sangat pas tanpa terasa ketat." }
-            ].map((review, idx) => (
-              <div key={idx} className="bg-white p-8 rounded-3xl border border-border shadow-md space-y-4 flex flex-col justify-between h-full">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-1">
-                    {[1,2,3,4,5].map(i => <Star key={i} size={13} className="fill-amber-400 text-amber-400" />)}
-                  </div>
-                  <p className="text-base text-text-p italic font-bold leading-relaxed">“{review.t}”</p>
-                </div>
-                <div className="flex items-center justify-between border-t border-border/80 pt-4 mt-2">
-                  <span className="text-sm font-extrabold text-text-p">{review.n}</span>
-                  <span className="text-[10px] font-bold uppercase text-accent-light bg-accent/5 px-2.5 py-0.5 rounded-full">{review.v}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* 8. COMPARISON SECTION */}
-        <section className="bg-white border border-border rounded-[3.5rem] p-10 md:p-16 max-w-3xl mx-auto space-y-10 shadow-premium">
-          <div className="text-center space-y-3">
-            <span className="text-[10px] font-black text-accent-light uppercase tracking-[0.3em]">Perbandingan Singkat</span>
-            <h2 className="text-3xl md:text-5xl font-black text-text-p tracking-tighter uppercase italic">vs Kaos Kaki Biasa</h2>
-          </div>
-
-          <div className="space-y-4">
-            <div className="grid grid-cols-12 gap-4 border-b border-border/80 pb-4 text-xs font-black uppercase text-text-s/70">
-              <div className="col-span-6">Keunggulan</div>
-              <div className="col-span-3 text-center text-accent">Lomira</div>
-              <div className="col-span-3 text-center">Biasa</div>
-            </div>
-            {[
-              { f: "Sirkulasi Udara Mikro 360°", a: true },
-              { f: "85% Katun Premium", a: true },
-              { f: "Jahitan Ganda Tumit & Ujung", a: true },
-              { f: "Cepat Kering & Anti Melar", a: true }
-            ].map((row, i) => (
-              <div key={i} className="grid grid-cols-12 gap-4 py-4 border-b border-border/40 text-sm items-center font-medium">
-                <div className="col-span-6 text-text-p font-bold">{row.f}</div>
-                <div className="col-span-3 text-center flex justify-center">
-                  <Check className="text-accent" size={18} />
-                </div>
-                <div className="col-span-3 text-center flex justify-center">
-                  <X className="text-rose-400" size={18} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* 9. OFFER / BUNDLES SECTION */}
-        <section id="pricing" className="pt-16 flex flex-col items-center">
-          <div className="w-full max-w-3xl bg-white border border-border rounded-[4.5rem] p-10 md:p-16 text-center relative shadow-premium overflow-hidden group">
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-transparent via-accent to-transparent"></div>
-            
-            <div className="inline-flex items-center gap-2 bg-slate-50 px-5 py-2 rounded-full border border-slate-100 mb-8 relative z-10">
-              <span className="text-xs font-black text-accent-light uppercase tracking-wider">Pilih Paket Anda</span>
-            </div>
-
-            <div className="mb-10 text-center space-y-2">
-              <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-text-p">Promo Terbatas</h2>
-              <p className="text-sm font-semibold text-rose-500 uppercase tracking-widest flex items-center justify-center gap-2 animate-pulse">
-                <Flame size={16} /> ⚡ Hanya tersisa {stock} paket. Promo segera berakhir.
+        {/* ── PROBLEM / SOLUTION ───────────────────── */}
+        <section className="py-28 md:py-36 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          <Reveal className="space-y-7">
+            <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-ink/30">Masalah Umum</span>
+            <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.8rem)] leading-[1.08] text-ink">
+              Kaki Gerah Bukan<br />Hal yang Wajar.
+            </h2>
+            <div className="space-y-4">
+              <p className="text-[15px] text-ink/48 leading-[1.85]">
+                Sebagian besar kaos kaki menggunakan bahan sintetis yang menjebak panas dan
+                kelembapan. Hasilnya: kaki berkeringat, tidak nyaman, dan bau sebelum hari berakhir.
+              </p>
+              <p className="text-[15px] text-ink font-semibold leading-[1.8]">
+                Lomira dirancang ulang dari dasarnya — bahan alami,
+                teknologi yang tepat, kenyamanan yang nyata.
               </p>
             </div>
+          </Reveal>
 
-            {/* Bundle Selector */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 text-left">
-              {[
-                { id: "3-pairs", title: "Paket 3 Pasang", price: "50.000", original: "60.000", save: "15%", sub: "Kenyamanan Standar" },
-                { id: "5-pairs", title: "Paket 5 Pasang", price: "70.000", original: "100.000", save: "30%", sub: "Paling Populer", featured: true },
-                { id: "10-pairs", title: "Paket 10 Pasang", price: "130.000", original: "200.000", save: "40%", sub: "Hemat Maksimal" }
-              ].map((bundle) => (
-                <div 
-                  key={bundle.id}
-                  onClick={() => setSelectedBundle(bundle.id)}
-                  className={`border p-6 rounded-3xl cursor-pointer flex flex-col justify-between gap-4 transition-all relative ${
-                    selectedBundle === bundle.id 
-                    ? "border-accent bg-accent/5 ring-4 ring-accent/10 scale-102" 
-                    : "border-border bg-white hover:border-slate-300"
-                  }`}
-                >
-                  {bundle.featured && (
-                    <div className="absolute -top-3 right-4 bg-accent text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full">
-                      🔥 Paling Populer
-                    </div>
-                  )}
-                  <div className="space-y-1">
-                    <h3 className="text-lg font-black text-text-p uppercase tracking-tight">{bundle.title}</h3>
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-text-s block opacity-70">{bundle.sub}</span>
+          <Reveal delay={0.12} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-[#FEF2F2] border border-red-100/80 rounded-2xl p-8 space-y-5">
+              <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center">
+                <X size={17} className="text-red-500" />
+              </div>
+              <div className="space-y-2">
+                <h4 className="font-semibold text-ink text-[15px]">Kaos Kaki Biasa</h4>
+                <p className="text-[13px] text-ink/45 leading-relaxed">
+                  Bahan sintetis, panas, mudah melar, berkeringat, dan bau menjelang siang.
+                </p>
+              </div>
+            </div>
+            <div className="bg-sage-light border border-sage/20 rounded-2xl p-8 space-y-5">
+              <div className="w-10 h-10 rounded-xl bg-sage/15 flex items-center justify-center">
+                <Check size={17} className="text-sage" />
+              </div>
+              <div className="space-y-2">
+                <h4 className="font-semibold text-sage text-[15px]">Lomira Air Mesh</h4>
+                <p className="text-[13px] text-ink/45 leading-relaxed">
+                  85% katun premium, ventilasi 360°, cepat kering, nyaman seharian penuh.
+                </p>
+              </div>
+            </div>
+          </Reveal>
+        </section>
+
+        {/* ── FEATURES ─────────────────────────────── */}
+        <section id="features" className="py-10 space-y-16">
+          <Reveal className="max-w-xl space-y-4">
+            <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-ink/30">Keunggulan</span>
+            <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.8rem)] leading-[1.08] text-ink">
+              Direkayasa untuk<br />Kenyamanan Nyata.
+            </h2>
+          </Reveal>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {FEATURES.map((f, i) => (
+              <Reveal key={i} delay={i * 0.07}>
+                <div className="group bg-white border border-border rounded-2xl p-7 space-y-5 hover:border-sage/30 hover:shadow-[0_8px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1.5 transition-all duration-500 h-full">
+                  <div className="w-11 h-11 rounded-xl bg-sage-light flex items-center justify-center group-hover:bg-sage transition-colors duration-500">
+                    <f.icon size={20} className="text-sage group-hover:text-white transition-colors duration-500" />
                   </div>
+                  <div className="space-y-2.5">
+                    <h3 className="font-semibold text-ink text-[15px]">{f.title}</h3>
+                    <p className="text-[13px] text-ink/42 leading-relaxed">{f.desc}</p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
 
-                  <div className="space-y-2">
-                    <div className="flex items-baseline justify-start gap-1">
-                      <span className="text-sm font-black text-accent">Rp</span>
-                      <span className="text-4xl font-black text-text-p tracking-tighter leading-none">{bundle.price}</span>
+        {/* ── GALLERY ──────────────────────────────── */}
+        <section className="py-24 md:py-32 space-y-12">
+          <Reveal className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div className="space-y-3">
+              <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-ink/30">Produk</span>
+              <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.8rem)] leading-[1.08] text-ink">
+                Setiap Detail<br />Terasa Berbeda.
+              </h2>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+            {/* Tall hero image */}
+            <Reveal className="row-span-2">
+              <div className="h-full min-h-[320px] overflow-hidden rounded-2xl bg-ink/[0.03] group cursor-pointer">
+                <img
+                  src="/real_assets/b_4_opt.jpg"
+                  alt="Ankle fit precision"
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
+                />
+              </div>
+            </Reveal>
+
+            {GALLERY.slice(1).map((img, i) => (
+              <Reveal key={i} delay={i * 0.06}>
+                <div className="aspect-square overflow-hidden rounded-2xl bg-ink/[0.03] group cursor-pointer">
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
+                  />
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        {/* ── REVIEWS ──────────────────────────────── */}
+        <section id="reviews" className="py-20 md:py-28 space-y-16">
+          <Reveal className="space-y-4">
+            <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-ink/30">Ulasan</span>
+            <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.8rem)] leading-[1.08] text-ink">
+              Kata Mereka.
+            </h2>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {REVIEWS.map((r, i) => (
+              <Reveal key={i} delay={i * 0.1}>
+                <div className="bg-white border border-border rounded-2xl p-8 space-y-6 h-full flex flex-col hover:border-ink/15 hover:shadow-[0_4px_24px_rgba(0,0,0,0.05)] transition-all duration-400">
+                  <div className="flex gap-0.5">
+                    {[...Array(5)].map((_, j) => (
+                      <Star key={j} size={12} className="fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                  <p className="font-display text-[1.05rem] text-ink/68 leading-[1.7] flex-1 italic">
+                    "{r.text}"
+                  </p>
+                  <div className="flex items-center justify-between pt-4 border-t border-border">
+                    <span className="font-semibold text-ink text-[14px]">{r.name}</span>
+                    <span className="text-[11px] text-ink/28 tracking-wider font-medium">{r.city}</span>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        {/* ── COMPARISON ───────────────────────────── */}
+        <section className="py-16 md:py-24 max-w-2xl space-y-12">
+          <Reveal className="space-y-4">
+            <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-ink/30">Perbandingan</span>
+            <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.8rem)] leading-[1.08] text-ink">
+              Lomira vs Lainnya.
+            </h2>
+          </Reveal>
+
+          <Reveal delay={0.1}>
+            <div className="bg-white border border-border rounded-2xl overflow-hidden">
+              <div className="grid grid-cols-12 bg-ink/[0.02] border-b border-border px-6 py-4">
+                <div className="col-span-6 text-[10px] font-semibold tracking-[0.18em] uppercase text-ink/35">Fitur</div>
+                <div className="col-span-3 text-center text-[10px] font-semibold tracking-[0.18em] uppercase text-sage">Lomira</div>
+                <div className="col-span-3 text-center text-[10px] font-semibold tracking-[0.18em] uppercase text-ink/25">Biasa</div>
+              </div>
+              {COMPARISON.map((feat, i) => (
+                <div
+                  key={i}
+                  className="grid grid-cols-12 px-6 py-4 border-b last:border-b-0 border-border items-center hover:bg-ink/[0.015] transition-colors"
+                >
+                  <div className="col-span-6 text-[14px] text-ink/62 font-medium">{feat}</div>
+                  <div className="col-span-3 flex justify-center">
+                    <div className="w-6 h-6 rounded-full bg-sage-light flex items-center justify-center">
+                      <Check size={12} className="text-sage" />
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-bold text-text-s/50">
-                      <span className="line-through">Rp {bundle.original}</span>
-                      <span className="text-accent bg-accent/10 font-bold px-2 py-0.5 rounded-md">Hemat {bundle.save}</span>
+                  </div>
+                  <div className="col-span-3 flex justify-center">
+                    <div className="w-6 h-6 rounded-full bg-red-50 flex items-center justify-center">
+                      <X size={12} className="text-red-400" />
                     </div>
                   </div>
                 </div>
               ))}
             </div>
+          </Reveal>
+        </section>
 
-            {/* SIZE & COLOR SELECTORS */}
-            <div className="bg-slate-50/70 border border-border/80 rounded-3xl p-6 mb-8 text-left space-y-6">
-              {/* SIZE */}
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-xs font-black uppercase tracking-wider text-text-p">Pilih Ukuran</span>
-                  <span className="text-[10px] font-bold text-accent">Kebanyakan pembeli memilih M</span>
-                </div>
-                <div className="grid grid-cols-4 gap-3">
-                  {['S', 'M', 'L', 'XL'].map((size) => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={`min-h-[46px] rounded-2xl font-black text-sm uppercase transition-all flex items-center justify-center border cursor-pointer relative ${
-                        selectedSize === size
-                          ? 'bg-white border-accent text-accent ring-4 ring-accent/5'
-                          : 'bg-white border-slate-200 text-text-p hover:border-slate-300'
-                      }`}
-                    >
-                      {size}
-                      {size === 'M' && (
-                        <span className="absolute -top-1.5 -right-1.5 bg-accent text-white text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full tracking-wider scale-90">
-                          Hot
-                        </span>
-                      )}
-                    </button>
-                  ))}
-                </div>
-                <span className="text-[10px] text-text-s font-semibold tracking-wide block">Ukuran standar sesuai ukuran sepatu</span>
+        {/* ── PRICING ──────────────────────────────── */}
+        <section id="pricing" className="py-20 md:py-32 space-y-16">
+          <Reveal className="space-y-4">
+            <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-ink/30">Penawaran</span>
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+              <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.8rem)] leading-[1.08] text-ink">
+                Pilih Paket Anda.
+              </h2>
+              <p className="text-[14px] text-ink/42 max-w-xs leading-relaxed">
+                Semakin banyak, semakin hemat. Gratis ongkir semua paket hari ini.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="max-w-3xl space-y-5">
+            {/* Bundle Selector */}
+            <Reveal>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {BUNDLES.map((b) => (
+                  <button
+                    key={b.id}
+                    onClick={() => setBundle(b.id)}
+                    className={`relative p-7 rounded-2xl border text-left transition-all duration-300 cursor-pointer ${
+                      bundle === b.id
+                        ? 'bg-ink border-ink shadow-[0_24px_64px_rgba(14,14,14,0.18)]'
+                        : 'bg-white border-border hover:border-ink/25 hover:shadow-[0_4px_24px_rgba(0,0,0,0.06)]'
+                    }`}
+                  >
+                    {b.featured && (
+                      <span className={`absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-semibold tracking-[0.14em] uppercase px-3.5 py-1 rounded-full whitespace-nowrap ${
+                        bundle === b.id ? 'bg-sage text-white' : 'bg-ink text-cream'
+                      }`}>
+                        {b.label}
+                      </span>
+                    )}
+                    {!b.featured && (
+                      <div className={`text-[10px] font-medium tracking-[0.18em] uppercase mb-4 ${bundle === b.id ? 'text-cream/40' : 'text-ink/28'}`}>
+                        {b.label}
+                      </div>
+                    )}
+                    {b.featured && <div className="mb-4" />}
+                    <div className={`text-[1rem] font-semibold mb-1 ${bundle === b.id ? 'text-cream' : 'text-ink'}`}>
+                      {b.pairs}
+                    </div>
+                    <div className={`text-[12px] mb-3 line-through ${bundle === b.id ? 'text-cream/28' : 'text-ink/22'}`}>
+                      Rp {b.original}
+                    </div>
+                    <div className={`text-[1.7rem] font-bold leading-none tracking-tight mb-2.5 ${bundle === b.id ? 'text-cream' : 'text-ink'}`}>
+                      Rp {b.price}
+                    </div>
+                    <div className={`text-[12px] font-semibold ${bundle === b.id ? 'text-sage-light' : 'text-sage'}`}>
+                      {b.save}
+                    </div>
+                  </button>
+                ))}
               </div>
+            </Reveal>
 
-              {/* COLOR */}
-              <div className="space-y-3 border-t border-border/60 pt-5">
-                <div className="flex justify-between items-center">
-                  <span className="text-xs font-black uppercase tracking-wider text-text-p">Pilih Warna</span>
-                  {selectedColor === 'Black' && (
-                    <span className="text-[10px] font-bold text-rose-500 animate-pulse">Stok menipis untuk Warna Hitam (Sisa 12)</span>
-                  )}
+            {/* Size & Color */}
+            <Reveal delay={0.08}>
+              <div className="bg-white border border-border rounded-2xl p-7 space-y-7">
+                {/* Size */}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[13px] font-semibold text-ink">Ukuran</span>
+                    <span className="text-[11px] text-ink/32 font-medium">Kebanyakan pilih M</span>
+                  </div>
+                  <div className="flex gap-3 flex-wrap">
+                    {['S', 'M', 'L', 'XL'].map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => setSize(s)}
+                        className={`relative h-11 w-14 rounded-xl text-[13px] font-semibold border transition-all cursor-pointer ${
+                          size === s
+                            ? 'bg-ink text-cream border-ink shadow-[0_4px_16px_rgba(14,14,14,0.15)]'
+                            : 'bg-white text-ink border-border hover:border-ink/30'
+                        }`}
+                      >
+                        {s}
+                        {s === 'M' && size !== 'M' && (
+                          <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-sage" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-[11px] text-ink/28 font-medium">Universal · Ukuran sepatu 36–43</p>
                 </div>
-                <div className="grid grid-cols-4 gap-3">
-                  {[
-                    { id: 'White', name: 'Putih', hex: '#FFFFFF' },
-                    { id: 'Grey', name: 'Abu', hex: '#94A3B8' },
-                    { id: 'Black', name: 'Hitam', hex: '#1E293B' },
-                    { id: 'Mix', name: 'Mix', hex: 'linear-gradient(135deg, #1E293B 50%, #FFFFFF 50%)' }
-                  ].map((color) => (
-                    <button
-                      key={color.id}
-                      onClick={() => setSelectedColor(color.id)}
-                      className={`min-h-[46px] p-2 rounded-2xl transition-all flex flex-col items-center justify-center gap-1.5 border cursor-pointer ${
-                        selectedColor === color.id
-                          ? 'bg-white border-accent ring-4 ring-accent/5'
-                          : 'bg-white border-slate-200 hover:border-slate-300'
-                      }`}
-                    >
-                      <span 
-                        className={`w-5 h-5 rounded-full border border-black/10 shrink-0 ${color.id === 'White' ? 'bg-white' : ''}`}
-                        style={{ background: color.id === 'Mix' ? color.hex : color.id === 'White' ? '' : color.hex }}
+
+                {/* Color */}
+                <div className="space-y-4 pt-1 border-t border-border">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[13px] font-semibold text-ink">Warna</span>
+                    <span className="text-[11px] text-ink/32 font-medium capitalize">{color}</span>
+                  </div>
+                  <div className="flex gap-3 flex-wrap items-center">
+                    {[
+                      { id: 'White', label: 'Putih', style: { background: '#F0EFEA', border: '1.5px solid rgba(14,14,14,0.12)' } },
+                      { id: 'Grey', label: 'Abu-abu', style: { background: '#94A3B8' } },
+                      { id: 'Black', label: 'Hitam', style: { background: '#1A1A1A' } },
+                      { id: 'Mix', label: 'Mix', style: { background: 'linear-gradient(135deg, #1A1A1A 50%, #F0EFEA 50%)', border: '1.5px solid rgba(14,14,14,0.1)' } },
+                    ].map((c) => (
+                      <button
+                        key={c.id}
+                        onClick={() => setColor(c.id)}
+                        title={c.label}
+                        style={c.style as React.CSSProperties}
+                        className={`w-9 h-9 rounded-full transition-all duration-200 cursor-pointer hover:scale-110 active:scale-95 ${
+                          color === c.id ? 'ring-2 ring-ink ring-offset-2 ring-offset-white' : ''
+                        }`}
                       />
-                      <span className="text-[9px] font-black text-text-p uppercase tracking-wider">{color.name}</span>
-                    </button>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
+            </Reveal>
 
-            {/* Massive Add to Cart */}
-            <div className="space-y-6">
-              <motion.a 
-                href={`https://wa.me/6281284477068?text=Halo%20Lomira,%20saya%20ingin%20pesan%20paket%20${selectedBundle}%20kaos%20kaki%20premium%20ankle.%20Ukuran:%20${selectedSize}.%20Warna:%20${selectedColor}.`}
-                target="_blank"
-                whileHover={{ scale: 1.01, y: -2 }}
-                whileTap={{ scale: 0.99 }}
-                className="w-full bg-[#1E293B] text-white py-5 sm:py-6 rounded-2xl flex items-center justify-center gap-4 shadow-xl hover:bg-black transition-all cursor-pointer font-black text-lg sm:text-xl uppercase tracking-wide border-b-4 border-slate-700"
-              >
-                <ShoppingBag size={24} />
-                <span className="tracking-tight">BELI SEKARANG</span>
-              </motion.a>
-
-              <div className="flex items-center justify-center gap-6 text-xs font-extrabold text-slate-700 uppercase tracking-widest flex-wrap">
-                <span className="flex items-center gap-1.5"><ShieldCheck size={14} className="text-accent shrink-0" /> Garansi Kenyamanan 10 Hari</span>
-                <button 
-                  onClick={() => setIsModalOpen(true)}
-                  className="text-accent hover:underline font-extrabold cursor-pointer text-xs"
+            {/* CTA */}
+            <Reveal delay={0.12}>
+              <div className="space-y-5">
+                <motion.a
+                  href={waUrl}
+                  target="_blank"
+                  whileHover={{ scale: 1.007 }}
+                  whileTap={{ scale: 0.995 }}
+                  className="group w-full bg-ink text-cream py-5 rounded-2xl font-semibold text-[16px] tracking-wide flex items-center justify-center gap-3 hover:bg-ink/88 transition-colors"
                 >
-                  S&K
-                </button>
+                  Beli Sekarang — Rp {selected.price}
+                  <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform duration-200" />
+                </motion.a>
+
+                <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[12px] text-ink/28 font-medium">
+                  <span className="flex items-center gap-1.5">
+                    <ShieldCheck size={13} className="text-sage" />
+                    Garansi 10 Hari
+                  </span>
+                  <span className="text-ink/15">·</span>
+                  <span>Pembayaran Aman</span>
+                  <span className="text-ink/15">·</span>
+                  <button
+                    onClick={() => setModal(true)}
+                    className="hover:text-ink transition-colors cursor-pointer underline underline-offset-2 decoration-ink/20"
+                  >
+                    Syarat & Ketentuan
+                  </button>
+                </div>
               </div>
-            </div>
+            </Reveal>
           </div>
         </section>
 
-        {/* 10. RISK REVERSAL: GUARANTEE BLOCK */}
-        <section className="bg-slate-50 border border-border rounded-[3.5rem] p-10 md:p-16 max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-10 shadow-md">
-          <div className="w-20 h-20 rounded-[2rem] bg-accent/10 flex items-center justify-center text-accent shrink-0">
-            <ShieldCheck size={40} />
-          </div>
-          <div className="space-y-3 flex-1">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <h3 className="text-2xl font-black text-text-p uppercase italic tracking-tight">Garansi Kenyamanan 10 Hari</h3>
-              <button 
-                onClick={() => setIsModalOpen(true)}
-                className="bg-accent/10 text-accent font-black text-xs uppercase tracking-wider px-4 py-2 rounded-full hover:bg-accent/20 transition-all cursor-pointer"
+        {/* ── GUARANTEE ────────────────────────────── */}
+        <Reveal>
+          <section className="py-8 mb-20">
+            <div className="bg-sage-light border border-sage/15 rounded-2xl p-10 md:p-14 flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
+              <div className="w-14 h-14 rounded-2xl bg-sage/15 flex items-center justify-center shrink-0 mx-auto md:mx-0">
+                <ShieldCheck size={26} className="text-sage" />
+              </div>
+              <div className="flex-1 space-y-2.5">
+                <h3 className="font-display text-[1.7rem] text-ink leading-tight">Garansi Kenyamanan 10 Hari</h3>
+                <p className="text-[14px] text-ink/45 leading-relaxed max-w-xl">
+                  Coba Lomira selama 10 hari. Jika kaki Anda tidak terasa lebih sejuk dan nyaman,
+                  kami kembalikan uang Anda — tanpa banyak pertanyaan.
+                </p>
+              </div>
+              <button
+                onClick={() => setModal(true)}
+                className="shrink-0 text-[13px] font-semibold text-sage border border-sage/30 px-6 py-3 rounded-full hover:bg-sage hover:text-white hover:border-sage transition-all duration-300 cursor-pointer"
               >
-                Baca S&K Selengkapnya
+                Baca S&K
               </button>
             </div>
-            <p className="text-base text-text-s leading-relaxed font-medium">
-              Coba kaos kaki Lomira selama 10 hari. Jika Anda tidak merasakan peningkatan kenyamanan, sirkulasi udara, atau kaki tetap sejuk secara nyata, Anda dapat mengajukan pengembalian dana.
-            </p>
-          </div>
-        </section>
+          </section>
+        </Reveal>
 
-      </motion.main>
+      </main>
 
-      {/* FOOTER */}
-      <footer className="mt-48 px-6 text-center space-y-10 border-t border-border pt-16">
-        <div className="flex flex-col items-center gap-5">
-          <img src="/logo_opt.png" alt="Lomira Product" loading="lazy" decoding="async" className="h-20 md:h-24 w-auto object-contain opacity-90 grayscale hover:grayscale-0 transition-all duration-300" />
-          <p className="text-[10px] font-bold text-text-s/40 uppercase tracking-[0.4em]">&copy; 2026 Lomira Premium. Hak Cipta Dilindungi Undang-Undang.</p>
+      {/* ── FOOTER ───────────────────────────────────── */}
+      <footer className="border-t border-border py-14 px-5 sm:px-8">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+          <img
+            src="/logo_opt.png"
+            alt="Lomira"
+            className="h-9 w-auto opacity-45 hover:opacity-70 transition-opacity duration-300"
+            loading="lazy"
+          />
+          <p className="text-[11px] tracking-[0.2em] uppercase text-ink/22 font-medium text-center">
+            © 2026 Lomira Premium · All Rights Reserved
+          </p>
+          <nav className="flex gap-7">
+            {([['Keunggulan', '#features'], ['Ulasan', '#reviews'], ['Harga', '#pricing']] as const).map(([label, href]) => (
+              <a key={href} href={href} className="text-[12px] text-ink/28 hover:text-ink transition-colors font-medium">
+                {label}
+              </a>
+            ))}
+          </nav>
         </div>
       </footer>
 
-      {/* 11. PREMIUM MODAL POPUP (S&K) */}
+      {/* ── STICKY MOBILE BAR ────────────────────────── */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden px-4 py-3 bg-cream/96 backdrop-blur-xl border-t border-border">
+        <a
+          href={waUrl}
+          target="_blank"
+          className="w-full bg-ink text-cream py-4 rounded-xl flex items-center justify-center font-semibold text-[15px] tracking-wide hover:bg-ink/85 transition-colors"
+        >
+          Beli Sekarang — Rp {selected.price}
+        </a>
+      </div>
+
+      {/* ── GUARANTEE MODAL ──────────────────────────── */}
       <AnimatePresence>
-        {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        {modal && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm"
+            onClick={() => setModal(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="bg-white w-full max-w-lg rounded-[2.5rem] p-8 md:p-10 border border-border shadow-2xl relative overflow-y-auto max-h-[85vh] space-y-6"
+              exit={{ opacity: 0, scale: 0.95, y: 16 }}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white w-full max-w-md rounded-2xl p-8 md:p-10 border border-border shadow-2xl overflow-y-auto max-h-[88vh] space-y-7"
             >
-              <div className="flex justify-between items-center border-b border-border/60 pb-4">
-                <div className="flex items-center gap-3">
-                  <ShieldCheck size={24} className="text-accent" />
-                  <h4 className="text-xl font-black text-text-p uppercase tracking-tight">Ketentuan Garansi 10 Hari</h4>
-                </div>
-                <button 
-                  onClick={() => setIsModalOpen(false)}
-                  className="w-10 h-10 rounded-full hover:bg-slate-50 border border-border/40 flex items-center justify-center text-text-s hover:text-text-p transition-all cursor-pointer"
+              <div className="flex justify-between items-start gap-4">
+                <h4 className="font-display text-[1.5rem] text-ink leading-tight">Garansi Kenyamanan 10 Hari</h4>
+                <button
+                  onClick={() => setModal(false)}
+                  className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-ink/30 hover:text-ink hover:bg-ink/5 transition-all cursor-pointer shrink-0 mt-0.5"
                 >
-                  <X size={20} />
+                  <X size={15} />
                 </button>
               </div>
 
-              <div className="space-y-4 text-sm text-text-s font-medium leading-relaxed">
-                <p className="font-bold text-text-p text-base">
-                  Coba kaos kaki Lomira selama 10 hari. Jika Anda tidak merasakan peningkatan kenyamanan, sirkulasi udara, atau kaki tetap kering secara nyata, Anda dapat mengajukan pengembalian dana.
+              <div className="space-y-5 text-[14px] text-ink/52 leading-relaxed">
+                <p className="font-semibold text-ink text-[15px] leading-relaxed">
+                  Kami sepenuhnya berdiri di balik kualitas produk kami.
                 </p>
-                <p>Untuk menjaga keadilan bagi semua pembeli:</p>
-                <ul className="list-disc pl-5 space-y-3">
-                  <li><strong>Uji Coba:</strong> Anda dapat menguji satu pasang dari pesanan Anda. Produk yang tersisa harus belum digunakan dan dalam kondisi asli.</li>
-                  <li><strong>Bukti:</strong> Foto produk dan penjelasan singkat diperlukan untuk semua permintaan pengembalian dana.</li>
-                  <li><strong>Ongkos Kirim:</strong> Biaya pengiriman awal tidak dapat dikembalikan.</li>
-                  <li><strong>Pembeli Pertama:</strong> Pengembalian dana hanya berlaku untuk pembelian pertama kali.</li>
+                <ul className="space-y-4">
+                  {[
+                    ['Uji Coba', 'Gunakan satu pasang. Produk lainnya harus tetap dalam kondisi asli dan belum dipakai.'],
+                    ['Bukti', 'Foto produk dan penjelasan singkat diperlukan untuk setiap klaim pengembalian dana.'],
+                    ['Ongkos Kirim', 'Biaya pengiriman awal tidak termasuk dalam nilai pengembalian dana.'],
+                    ['Berlaku Untuk', 'Garansi hanya berlaku untuk pembelian pertama kali dari pelanggan baru.'],
+                  ].map(([title, desc]) => (
+                    <li key={title} className="flex gap-3.5">
+                      <Check size={14} className="text-sage shrink-0 mt-0.5" />
+                      <span>
+                        <strong className="text-ink font-semibold">{title}:</strong>{' '}
+                        {desc}
+                      </span>
+                    </li>
+                  ))}
                 </ul>
-                <p className="pt-2 border-t border-border/40 text-xs italic font-bold">
-                  Kami merancang Lomira untuk mengungguli kaos kaki biasa — dan kami menjaminnya sepenuhnya.
+                <p className="pt-4 border-t border-border text-[12px] italic text-ink/30 leading-relaxed">
+                  Kami merancang Lomira untuk melampaui ekspektasi Anda — dan kami menjaminnya sepenuhnya.
                 </p>
               </div>
 
-              <div className="pt-2">
-                <button 
-                  onClick={() => setIsModalOpen(false)}
-                  className="w-full bg-[#1E293B] hover:bg-black text-white font-black text-base uppercase py-4 rounded-xl transition-all cursor-pointer"
-                >
-                  SAYA MENGERTI
-                </button>
-              </div>
+              <button
+                onClick={() => setModal(false)}
+                className="w-full bg-ink text-cream py-4 rounded-xl font-semibold text-[14px] hover:bg-ink/85 transition-colors cursor-pointer"
+              >
+                Mengerti
+              </button>
             </motion.div>
           </div>
         )}
