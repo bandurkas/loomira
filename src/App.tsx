@@ -163,7 +163,7 @@ export default function App() {
         <div className="border-y border-border bg-white">
           <div className="max-w-6xl mx-auto px-6 sm:px-10 grid grid-cols-2 md:grid-cols-4">
             {[{stat:'5.000+',label:'Pembeli Puas'},{stat:'4.9 ★',label:'Rating Rata-rata'},{stat:'10 Hari',label:'Garansi Nyaman'},{stat:'Gratis',label:'Ongkir Hari Ini'}].map((item,i) => (
-              <div key={i} className="flex flex-col items-center gap-1.5 py-6 px-4 border-r border-b md:border-b-0 last:border-r-0 border-border text-center">
+              <div key={i} className="flex flex-col items-center gap-1.5 py-7 px-4 border-r border-b md:border-b-0 last:border-r-0 border-border text-center">
                 <span className="font-display text-[1.55rem] font-semibold text-ink">{item.stat}</span>
                 <span className="text-[10px] tracking-[0.16em] uppercase text-ink/32 font-medium">{item.label}</span>
               </div>
@@ -174,8 +174,8 @@ export default function App() {
 
       <main className="max-w-6xl mx-auto px-6 sm:px-10 pb-28 md:pb-0">
 
-        {/* ── PROBLEM / SOLUTION ─── py-20 md:py-24 */}
-        <section className="py-20 md:py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        {/* ── PROBLEM / SOLUTION ─── unified rhythm */}
+        <section className="py-12 md:py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <Reveal className="space-y-6">
             <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-ink/30">Masalah Umum</span>
             <h2 className="font-display text-[clamp(2rem,4vw,3.5rem)] leading-[1.1] text-ink">
@@ -209,8 +209,8 @@ export default function App() {
           </Reveal>
         </section>
 
-        {/* ── FEATURES ─── py-16 */}
-        <section id="features" className="py-16 space-y-12">
+        {/* ── FEATURES ─── unified rhythm */}
+        <section id="features" className="py-12 md:py-16 space-y-10">
           <Reveal className="max-w-lg space-y-3">
             <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-ink/30">Keunggulan</span>
             <h2 className="font-display text-[clamp(2rem,4vw,3.5rem)] leading-[1.1] text-ink">
@@ -238,8 +238,8 @@ export default function App() {
           </div>
         </section>
 
-        {/* ── GALLERY ── py-20 md:py-24 */}
-        <section id="gallery" className="py-20 md:py-24">
+        {/* ── GALLERY ── unified rhythm */}
+        <section id="gallery" className="py-12 md:py-16">
           <Reveal className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
             <div className="space-y-2.5">
               <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-ink/30">Koleksi</span>
@@ -317,8 +317,8 @@ export default function App() {
           </Reveal>
         </section>
 
-        {/* ── REVIEWS ── py-16 md:py-20 */}
-        <section id="reviews" className="py-16 md:py-20 space-y-10">
+        {/* ── REVIEWS ── unified rhythm */}
+        <section id="reviews" className="py-12 md:py-16 space-y-10">
           <Reveal className="space-y-3">
             <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-ink/30">Ulasan</span>
             <h2 className="font-display text-[clamp(2rem,4vw,3.5rem)] leading-[1.1] text-ink">Kata Mereka.</h2>
@@ -345,7 +345,7 @@ export default function App() {
             ── COMPARISON  ─  two-column editorial layout
             Full width — no max-w constraint
         ══════════════════════════════════════════════════ */}
-        <section className="py-16 md:py-20">
+        <section className="py-12 md:py-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
             {/* Left: header + context */}
@@ -395,7 +395,7 @@ export default function App() {
         {/* ══════════════════════════════════════════════════
             ── PRICING  ─  full container width
         ══════════════════════════════════════════════════ */}
-        <section id="pricing" className="py-16 md:py-20 space-y-10">
+        <section id="pricing" className="py-12 md:py-16 space-y-10">
           <Reveal className="space-y-3">
             <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-ink/30">Penawaran</span>
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
@@ -530,9 +530,9 @@ export default function App() {
           </Reveal>
         </section>
 
-        {/* ── GUARANTEE ── py-8 mb-16 */}
+        {/* ── GUARANTEE ── unified rhythm with top breathing */}
         <Reveal>
-          <section className="mb-16">
+          <section className="pt-4 pb-12 md:pt-6 md:pb-16">
             <div className="bg-sage-light border border-sage/14 rounded-2xl px-8 md:px-12 py-10 flex flex-col md:flex-row items-center gap-7 text-center md:text-left">
               <div className="w-13 h-13 min-w-[52px] min-h-[52px] rounded-2xl bg-sage/12 flex items-center justify-center">
                 <ShieldCheck size={24} className="text-sage" />
