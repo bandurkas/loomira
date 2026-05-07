@@ -56,42 +56,27 @@ const BUNDLES = [
 ];
 
 const COLOR_OPTIONS = [
-  {
-    id: 'White',
-    label: 'Putih',
-    img: '/real_assets/pack_white.png',
-    swatch: '#F0EFEA',
-    border: true,
-  },
-  {
-    id: 'Grey',
-    label: 'Abu-abu',
-    img: '/real_assets/pack_grey.png',
-    swatch: '#94A3B8',
-  },
-  {
-    id: 'Black',
-    label: 'Hitam',
-    img: '/real_assets/pack_grid_1.png',
-    swatch: '#1A1A1A',
-  },
-  {
-    id: 'Mix',
-    label: 'Mix',
-    img: '/real_assets/All_in_one.png',
-    swatch: '',
-    gradient: true,
-  },
+  { id: 'White',  label: 'Putih',   img: '/real_assets/pack_white.png' },
+  { id: 'Grey',   label: 'Abu-abu', img: '/real_assets/pack_grey.png'  },
+  { id: 'Black',  label: 'Hitam',   img: '/real_assets/pack_white_b.jpg', dark: true },
+  { id: 'Mix',    label: 'Mix',     img: '/real_assets/product_stack.png' },
+];
+
+const PRODUCT_SPECS = [
+  { label: 'Material',   value: '85% Katun Premium' },
+  { label: 'Ukuran',     value: 'Universal 36–43'   },
+  { label: 'Warna',      value: '4 Pilihan'         },
+  { label: 'Isi Paket',  value: '5 Pasang'          },
 ];
 
 export default function App() {
-  const [bundle, setBundle] = useState('5');
-  const [size, setSize] = useState('M');
-  const [color, setColor] = useState('White');
-  const [modal, setModal] = useState(false);
+  const [bundle, setBundle]   = useState('5');
+  const [size,   setSize]     = useState('M');
+  const [color,  setColor]    = useState('White');
+  const [modal,  setModal]    = useState(false);
 
-  const selected = BUNDLES.find((b) => b.id === bundle)!;
-  const selectedColor = COLOR_OPTIONS.find((c) => c.id === color)!;
+  const selected      = BUNDLES.find(b => b.id === bundle)!;
+  const selectedColor = COLOR_OPTIONS.find(c => c.id === color)!;
   const waMsg = encodeURIComponent(
     `Halo Lomira, saya ingin memesan ${selected.pairs} kaos kaki premium. Ukuran: ${size}. Warna: ${color}.`
   );
@@ -100,35 +85,33 @@ export default function App() {
   return (
     <div className="min-h-screen bg-cream text-ink font-sans antialiased selection:bg-ink selection:text-cream">
 
-      {/* ── ANNOUNCEMENT BAR ─────────────────────────── */}
+      {/* ── ANNOUNCEMENT ─────────────────────────── */}
       <div className="bg-ink text-cream/55 text-center py-2.5 text-[11px] tracking-[0.22em] uppercase font-medium">
         Gratis Ongkir Seluruh Indonesia&nbsp;&nbsp;·&nbsp;&nbsp;Hari Ini Saja
       </div>
 
-      {/* ── NAVIGATION ───────────────────────────────── */}
+      {/* ── NAV ──────────────────────────────────── */}
       <header className="sticky top-0 z-50 border-b border-border bg-cream/90 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 flex items-center justify-between h-[60px]">
           <a href="#">
             <img src="/logo_opt.png" alt="Lomira" className="h-9 sm:h-11 w-auto" fetchpriority="high" decoding="sync" />
           </a>
           <nav className="hidden md:flex items-center gap-8">
-            {([['Keunggulan', '#features'], ['Koleksi', '#gallery'], ['Ulasan', '#reviews'], ['Harga', '#pricing']] as const).map(([label, href]) => (
-              <a key={href} href={href} className="text-[12px] font-medium text-ink/40 hover:text-ink transition-colors tracking-wide">{label}</a>
+            {([['Keunggulan','#features'],['Koleksi','#gallery'],['Ulasan','#reviews'],['Harga','#pricing']] as const).map(([l,h]) => (
+              <a key={h} href={h} className="text-[12px] font-medium text-ink/40 hover:text-ink transition-colors tracking-wide">{l}</a>
             ))}
           </nav>
-          <a href="#pricing" className="text-[12px] font-semibold bg-ink text-cream px-5 py-2.5 rounded-full hover:bg-ink/80 transition-colors">
-            Beli Sekarang
-          </a>
+          <a href="#pricing" className="text-[12px] font-semibold bg-ink text-cream px-5 py-2.5 rounded-full hover:bg-ink/80 transition-colors">Beli Sekarang</a>
         </div>
       </header>
 
-      {/* ── HERO ─────────────────────────────────────── */}
+      {/* ── HERO ─────────────────────────────────── */}
       <section className="relative overflow-hidden min-h-[92vh] flex items-center">
         <div className="absolute inset-0 bg-gradient-to-br from-cream via-cream to-sage-light/50 pointer-events-none" />
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-sage/5 rounded-full blur-3xl pointer-events-none" />
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 w-full py-24 md:py-32 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
           <div className="order-2 lg:order-1 space-y-9">
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: EASE }} className="space-y-7">
+            <motion.div initial={{ opacity:0,y:30 }} animate={{ opacity:1,y:0 }} transition={{ duration:0.9,ease:EASE }} className="space-y-7">
               <span className="inline-flex items-center gap-2.5 text-[11px] font-medium tracking-[0.18em] uppercase text-ink/40 border border-border rounded-full px-4 py-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-sage animate-pulse" />
                 Premium Ankle Socks
@@ -140,37 +123,30 @@ export default function App() {
                 Rajutan 85% katun premium dengan ventilasi 360°. Menjaga kaki tetap sejuk, kering, dan bebas bau — dari pagi hingga malam.
               </p>
             </motion.div>
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: EASE, delay: 0.18 }} className="flex flex-col sm:flex-row gap-3">
+            <motion.div initial={{ opacity:0,y:20 }} animate={{ opacity:1,y:0 }} transition={{ duration:0.8,ease:EASE,delay:0.18 }} className="flex flex-col sm:flex-row gap-3">
               <a href={waUrl} target="_blank" className="group bg-ink text-cream px-8 py-4 rounded-full font-semibold text-[14px] tracking-wide hover:bg-ink/85 transition-all flex items-center justify-center gap-2.5">
                 Beli 5 Pasang — Rp 70.000
                 <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-200" />
               </a>
-              <a href="#gallery" className="px-8 py-4 rounded-full font-semibold text-[14px] tracking-wide border border-border hover:bg-ink/5 transition-all flex items-center justify-center text-ink/55">
-                Lihat Koleksi
-              </a>
+              <a href="#gallery" className="px-8 py-4 rounded-full font-semibold text-[14px] tracking-wide border border-border hover:bg-ink/5 transition-all flex items-center justify-center text-ink/55">Lihat Koleksi</a>
             </motion.div>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.35 }} className="flex items-center gap-4">
-              <div className="flex">{[...Array(5)].map((_, i) => <Star key={i} size={12} className="fill-amber-400 text-amber-400" />)}</div>
+            <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ duration:0.8,delay:0.35 }} className="flex items-center gap-4">
+              <div className="flex">{[...Array(5)].map((_,i) => <Star key={i} size={12} className="fill-amber-400 text-amber-400" />)}</div>
               <span className="text-[12px] text-ink/38 font-medium">4.9 · 5.000+ pembeli terverifikasi</span>
             </motion.div>
           </div>
-          <motion.div initial={{ opacity: 0, scale: 0.97, y: 12 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 1.1, ease: EASE }} className="order-1 lg:order-2 flex justify-center items-center relative">
+          <motion.div initial={{ opacity:0,scale:0.97,y:12 }} animate={{ opacity:1,scale:1,y:0 }} transition={{ duration:1.1,ease:EASE }} className="order-1 lg:order-2 flex justify-center items-center relative">
             <div className="absolute w-3/4 h-3/4 bg-sage/12 rounded-full blur-3xl" />
             <img src="/lomira_hero_ankle_5pack_opt.png" alt="Lomira Premium Ankle Socks 5 Pack" fetchpriority="high" decoding="sync" className="relative w-full max-w-[380px] lg:max-w-[480px] h-auto object-contain drop-shadow-[0_48px_96px_rgba(0,0,0,0.13)] hover:scale-[1.02] transition-transform duration-700" />
           </motion.div>
         </div>
       </section>
 
-      {/* ── TRUST STRIP ──────────────────────────────── */}
+      {/* ── TRUST STRIP ──────────────────────────── */}
       <Reveal>
         <div className="border-y border-border bg-white">
           <div className="max-w-6xl mx-auto px-5 sm:px-8 grid grid-cols-2 md:grid-cols-4">
-            {[
-              { stat: '5.000+', label: 'Pembeli Puas' },
-              { stat: '4.9 ★', label: 'Rating Rata-rata' },
-              { stat: '10 Hari', label: 'Garansi Nyaman' },
-              { stat: 'Gratis', label: 'Ongkir Hari Ini' },
-            ].map((item) => (
+            {[{stat:'5.000+',label:'Pembeli Puas'},{stat:'4.9 ★',label:'Rating Rata-rata'},{stat:'10 Hari',label:'Garansi Nyaman'},{stat:'Gratis',label:'Ongkir Hari Ini'}].map(item => (
               <div key={item.label} className="flex flex-col items-center gap-1.5 py-7 px-4 border-r border-b md:border-b-0 last:border-r-0 border-border text-center">
                 <span className="font-display text-[1.65rem] font-semibold text-ink">{item.stat}</span>
                 <span className="text-[10px] tracking-[0.18em] uppercase text-ink/35 font-medium">{item.label}</span>
@@ -182,13 +158,11 @@ export default function App() {
 
       <main className="max-w-6xl mx-auto px-5 sm:px-8 pb-28 md:pb-0">
 
-        {/* ── PROBLEM / SOLUTION ───────────────────── */}
+        {/* ── PROBLEM / SOLUTION ───────────────── */}
         <section className="py-28 md:py-36 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           <Reveal className="space-y-7">
             <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-ink/30">Masalah Umum</span>
-            <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.8rem)] leading-[1.08] text-ink">
-              Kaki Gerah Bukan<br />Hal yang Wajar.
-            </h2>
+            <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.8rem)] leading-[1.08] text-ink">Kaki Gerah Bukan<br />Hal yang Wajar.</h2>
             <div className="space-y-4">
               <p className="text-[15px] text-ink/48 leading-[1.85]">Sebagian besar kaos kaki menggunakan bahan sintetis yang menjebak panas dan kelembapan. Hasilnya: kaki berkeringat, tidak nyaman, dan bau sebelum hari berakhir.</p>
               <p className="text-[15px] text-ink font-semibold leading-[1.8]">Lomira dirancang ulang dari dasarnya — bahan alami, teknologi yang tepat, kenyamanan yang nyata.</p>
@@ -212,14 +186,14 @@ export default function App() {
           </Reveal>
         </section>
 
-        {/* ── FEATURES ─────────────────────────────── */}
+        {/* ── FEATURES ─────────────────────────── */}
         <section id="features" className="py-10 space-y-16">
           <Reveal className="max-w-xl space-y-4">
             <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-ink/30">Keunggulan</span>
             <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.8rem)] leading-[1.08] text-ink">Direkayasa untuk<br />Kenyamanan Nyata.</h2>
           </Reveal>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {FEATURES.map((f, i) => (
+            {FEATURES.map((f,i) => (
               <Reveal key={i} delay={i * 0.07}>
                 <div className="group bg-white border border-border rounded-2xl p-7 space-y-5 hover:border-sage/30 hover:shadow-[0_8px_48px_rgba(0,0,0,0.06)] hover:-translate-y-1.5 transition-all duration-500 h-full">
                   <div className="w-11 h-11 rounded-xl bg-sage-light flex items-center justify-center group-hover:bg-sage transition-colors duration-500">
@@ -235,156 +209,132 @@ export default function App() {
           </div>
         </section>
 
-        {/* ── GALLERY (REDESIGNED) ──────────────────── */}
-        <section id="gallery" className="py-24 md:py-32 space-y-10">
-          <Reveal className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+        {/* ══════════════════════════════════════════════════════
+            ── GALLERY  ─  premium editorial bento grid
+        ══════════════════════════════════════════════════════ */}
+        <section id="gallery" className="py-24 md:py-32">
+
+          {/* Header */}
+          <Reveal className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 md:mb-14">
             <div className="space-y-3">
               <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-ink/30">Koleksi</span>
               <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.8rem)] leading-[1.08] text-ink">
                 Pure Cotton Rib.<br />
-                <em className="text-ink/45">Minimalist & Everyday.</em>
+                <em className="text-ink/38">Minimalist &amp; Everyday.</em>
               </h2>
             </div>
-            <p className="text-[13px] text-ink/40 max-w-xs leading-relaxed">
-              Tersedia dalam 4 warna — Putih, Abu-abu, Hitam, dan Mix.<br />
-              Masing-masing 5 pasang per paket.
+            <p className="text-[13px] text-ink/35 max-w-[200px] leading-[1.75] shrink-0">
+              4 warna&nbsp;·&nbsp;5 pasang<br />per paket&nbsp;·&nbsp;Katun premium
             </p>
           </Reveal>
 
-          {/* Main editorial grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+          {/* ── MAIN BENTO  ─  perfectly balanced, equal height ── */}
+          <Reveal className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:h-[560px]">
 
-            {/* Left: Tall lifestyle grid */}
-            <Reveal className="lg:col-span-5">
-              <div className="relative overflow-hidden rounded-2xl bg-ink/[0.03] group cursor-pointer h-[480px] md:h-[600px] lg:h-full lg:min-h-[560px]">
+            {/* LEFT — Grey pack, tall portrait, full height */}
+            <div className="lg:col-span-5 relative overflow-hidden rounded-2xl bg-[#EBEBEA] group cursor-pointer
+                            aspect-[4/5] lg:aspect-auto">
+              <img
+                src="/real_assets/pack_grey.png"
+                alt="Grey Edition — Pure Cotton Rib"
+                loading="lazy" decoding="async"
+                className="w-full h-full object-cover object-center
+                           group-hover:scale-[1.03] transition-transform duration-700"
+              />
+              {/* bottom fade overlay */}
+              <div className="absolute inset-x-0 bottom-0 h-40
+                              bg-gradient-to-t from-ink/60 via-ink/20 to-transparent" />
+              <div className="absolute bottom-6 left-6 space-y-1">
+                <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-white/50">Pure Cotton Rib</p>
+                <p className="font-display text-white text-[1.5rem] leading-tight italic">Grey Edition</p>
+              </div>
+            </div>
+
+            {/* RIGHT — Stacked: wide banner on top, two equal cards below */}
+            <div className="lg:col-span-7 grid grid-rows-[3fr_2fr] gap-4 lg:h-[560px]">
+
+              {/* RIGHT TOP — White pack wide landscape */}
+              <div className="relative overflow-hidden rounded-2xl bg-[#F0EFEB] group cursor-pointer
+                              aspect-[16/7] lg:aspect-auto">
                 <img
-                  src="/real_assets/pack_grid_2.png"
-                  alt="Lomira Premium Socks — Collection"
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700"
+                  src="/real_assets/pack_white_b.jpg"
+                  alt="White Edition — Pure Cotton Rib"
+                  loading="lazy" decoding="async"
+                  className="w-full h-full object-cover
+                             group-hover:scale-[1.03] transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-7">
-                  <span className="text-[10px] font-medium tracking-[0.2em] uppercase text-white/55 block mb-2">Koleksi Lengkap</span>
-                  <p className="font-display text-white text-[1.4rem] leading-tight italic">Untuk Setiap Aktivitas,<br />Setiap Hari.</p>
+                <div className="absolute inset-0 bg-gradient-to-r from-ink/50 via-ink/15 to-transparent" />
+                <div className="absolute left-7 top-1/2 -translate-y-1/2 space-y-2">
+                  <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-white/50">5 Pasang per Pack</p>
+                  <p className="font-display text-white text-[1.6rem] leading-[1.15] italic">
+                    Pure White<br />Edition
+                  </p>
                 </div>
               </div>
-            </Reveal>
 
-            {/* Right: 2x2 grid of packaging shots */}
-            <div className="lg:col-span-7 grid grid-cols-2 gap-4">
-              {/* White pack — large */}
-              <Reveal delay={0.06} className="col-span-2">
-                <div className="relative overflow-hidden rounded-2xl bg-[#F2F0EB] group cursor-pointer aspect-[16/9]">
+              {/* RIGHT BOTTOM — two equal square cards */}
+              <div className="grid grid-cols-2 gap-4">
+
+                {/* Bottom-left: ankle lifestyle */}
+                <div className="relative overflow-hidden rounded-2xl bg-[#ECEAE7] group cursor-pointer
+                                aspect-square lg:aspect-auto">
                   <img
-                    src="/real_assets/pack_white_b.jpg"
-                    alt="Lomira White — Pure Cotton Rib"
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
+                    src="/real_assets/b_4_opt.jpg"
+                    alt="Premium Ankle Fit"
+                    loading="lazy" decoding="async"
+                    className="w-full h-full object-cover
+                               group-hover:scale-[1.05] transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-ink/40 via-transparent to-transparent" />
-                  <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-center p-8">
-                    <span className="text-[10px] font-medium tracking-[0.2em] uppercase text-white/60 mb-2">5 Pasang per Pack</span>
-                    <p className="font-display text-white text-[1.5rem] leading-tight">Pure White<br /><em>Edition</em></p>
+                  <div className="absolute inset-x-0 bottom-0 h-28
+                                  bg-gradient-to-t from-ink/55 to-transparent" />
+                  <div className="absolute bottom-4 left-5">
+                    <p className="font-display text-white italic text-[1rem] leading-tight">Ankle Fit</p>
                   </div>
                 </div>
-              </Reveal>
 
-              {/* Grey pack */}
-              <Reveal delay={0.1}>
-                <div className="relative overflow-hidden rounded-2xl bg-[#ECEAE6] group cursor-pointer aspect-square">
+                {/* Bottom-right: product stack */}
+                <div className="relative overflow-hidden rounded-2xl bg-[#F0EBE0] group cursor-pointer
+                                aspect-square lg:aspect-auto">
                   <img
-                    src="/real_assets/pack_grey.png"
-                    alt="Lomira Grey — Pure Cotton Rib"
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
+                    src="/real_assets/product_stack.png"
+                    alt="5 Pasang Kaos Kaki Premium"
+                    loading="lazy" decoding="async"
+                    className="w-full h-full object-cover object-center
+                               group-hover:scale-[1.05] transition-transform duration-700"
                   />
-                  <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-ink/50 to-transparent p-5">
-                    <p className="font-display text-white text-[1.1rem] italic">Grey Edition</p>
+                  <div className="absolute inset-x-0 bottom-0 h-28
+                                  bg-gradient-to-t from-ink/50 to-transparent" />
+                  <div className="absolute bottom-4 left-5">
+                    <p className="font-display text-white italic text-[1rem] leading-tight">
+                      Nyaman<br />Seharian
+                    </p>
                   </div>
                 </div>
-              </Reveal>
-
-              {/* White pack 2 */}
-              <Reveal delay={0.14}>
-                <div className="relative overflow-hidden rounded-2xl bg-[#F5F3EE] group cursor-pointer aspect-square">
-                  <img
-                    src="/real_assets/pack_white.png"
-                    alt="Lomira White Pack"
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
-                  />
-                  <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-ink/50 to-transparent p-5">
-                    <p className="font-display text-white text-[1.1rem] italic">White Edition</p>
-                  </div>
-                </div>
-              </Reveal>
-            </div>
-          </div>
-
-          {/* Full-width brand banner */}
-          <Reveal delay={0.08}>
-            <div className="relative overflow-hidden rounded-2xl group cursor-pointer aspect-[21/9] md:aspect-[3/1]">
-              <img
-                src="/real_assets/All_in_one.png"
-                alt="Lomira — All Colors Collection"
-                loading="lazy"
-                decoding="async"
-                className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-1000"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-ink/55 via-ink/20 to-transparent" />
-              <div className="absolute inset-0 flex flex-col justify-center px-10 md:px-16">
-                <span className="text-[10px] font-medium tracking-[0.25em] uppercase text-white/50 mb-3">Lomira Premium</span>
-                <h3 className="font-display text-[clamp(1.6rem,4vw,3rem)] text-white leading-tight mb-3">
-                  Comfort · Minimal · Essential
-                </h3>
-                <p className="text-[14px] text-white/60 max-w-sm leading-relaxed">
-                  Kaos kaki premium untuk sehari-hari.<br />Putih, Abu, Hitam, dan Mix dalam satu koleksi.
-                </p>
-                <a href="#pricing" className="mt-6 inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/20 text-white text-[12px] font-semibold tracking-wide px-5 py-2.5 rounded-full w-fit hover:bg-white/25 transition-all group/btn">
-                  Pilih Paket Anda
-                  <ArrowRight size={13} className="group-hover/btn:translate-x-0.5 transition-transform" />
-                </a>
               </div>
             </div>
           </Reveal>
 
-          {/* Bottom row: product stack + lifestyle grid 2 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Reveal className="md:col-span-1">
-              <div className="relative overflow-hidden rounded-2xl bg-[#F7F0E8] group cursor-pointer h-[340px]">
-                <img
-                  src="/real_assets/product_stack.png"
-                  alt="Kaos Kaki Premium 5 Pasang"
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
-                />
-              </div>
-            </Reveal>
-            <Reveal delay={0.06} className="md:col-span-2">
-              <div className="relative overflow-hidden rounded-2xl bg-ink/[0.03] group cursor-pointer h-[340px]">
-                <img
-                  src="/real_assets/pack_grid_1.png"
-                  alt="Lomira Premium Lifestyle"
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-7">
-                  <p className="font-display text-white text-[1.3rem] leading-tight italic">
-                    Nyaman dari Pagi<br />hingga Malam.
-                  </p>
+          {/* ── PRODUCT SPEC STRIP — Uniqlo / Muji style ── */}
+          <Reveal delay={0.1} className="mt-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 overflow-hidden
+                            rounded-2xl border border-border bg-white">
+              {PRODUCT_SPECS.map((s, i) => (
+                <div key={i}
+                  className="flex flex-col gap-1.5 px-7 py-5
+                             border-r border-b md:border-b-0 last:border-r-0
+                             border-border"
+                >
+                  <span className="text-[10px] font-medium tracking-[0.18em] uppercase text-ink/28">
+                    {s.label}
+                  </span>
+                  <span className="text-[14px] font-semibold text-ink">{s.value}</span>
                 </div>
-              </div>
-            </Reveal>
-          </div>
+              ))}
+            </div>
+          </Reveal>
+
         </section>
+        {/* ══════════════════════════════════════════════════════ */}
 
         {/* ── REVIEWS ──────────────────────────────── */}
         <section id="reviews" className="py-20 md:py-28 space-y-16">
@@ -393,10 +343,10 @@ export default function App() {
             <h2 className="font-display text-[clamp(2.2rem,4.5vw,3.8rem)] leading-[1.08] text-ink">Kata Mereka.</h2>
           </Reveal>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {REVIEWS.map((r, i) => (
+            {REVIEWS.map((r,i) => (
               <Reveal key={i} delay={i * 0.1}>
                 <div className="bg-white border border-border rounded-2xl p-8 space-y-6 h-full flex flex-col hover:border-ink/15 hover:shadow-[0_4px_24px_rgba(0,0,0,0.05)] transition-all duration-300">
-                  <div className="flex gap-0.5">{[...Array(5)].map((_, j) => <Star key={j} size={12} className="fill-amber-400 text-amber-400" />)}</div>
+                  <div className="flex gap-0.5">{[...Array(5)].map((_,j) => <Star key={j} size={12} className="fill-amber-400 text-amber-400" />)}</div>
                   <p className="font-display text-[1.05rem] text-ink/68 leading-[1.7] flex-1 italic">"{r.text}"</p>
                   <div className="flex items-center justify-between pt-4 border-t border-border">
                     <span className="font-semibold text-ink text-[14px]">{r.name}</span>
@@ -421,7 +371,7 @@ export default function App() {
                 <div className="col-span-3 text-center text-[10px] font-semibold tracking-[0.18em] uppercase text-sage">Lomira</div>
                 <div className="col-span-3 text-center text-[10px] font-semibold tracking-[0.18em] uppercase text-ink/25">Biasa</div>
               </div>
-              {COMPARISON.map((feat, i) => (
+              {COMPARISON.map((feat,i) => (
                 <div key={i} className="grid grid-cols-12 px-6 py-4 border-b last:border-b-0 border-border items-center hover:bg-ink/[0.015] transition-colors">
                   <div className="col-span-6 text-[14px] text-ink/62 font-medium">{feat}</div>
                   <div className="col-span-3 flex justify-center"><div className="w-6 h-6 rounded-full bg-sage-light flex items-center justify-center"><Check size={12} className="text-sage" /></div></div>
@@ -446,25 +396,31 @@ export default function App() {
             {/* Bundle Selector */}
             <Reveal>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {BUNDLES.map((b) => (
+                {BUNDLES.map(b => (
                   <button key={b.id} onClick={() => setBundle(b.id)}
-                    className={`relative p-7 rounded-2xl border text-left transition-all duration-300 cursor-pointer ${bundle === b.id ? 'bg-ink border-ink shadow-[0_24px_64px_rgba(14,14,14,0.18)]' : 'bg-white border-border hover:border-ink/25 hover:shadow-[0_4px_24px_rgba(0,0,0,0.06)]'}`}
+                    className={`relative p-7 rounded-2xl border text-left transition-all duration-300 cursor-pointer ${
+                      bundle === b.id
+                        ? 'bg-ink border-ink shadow-[0_24px_64px_rgba(14,14,14,0.18)]'
+                        : 'bg-white border-border hover:border-ink/25 hover:shadow-[0_4px_24px_rgba(0,0,0,0.06)]'
+                    }`}
                   >
                     {b.featured && (
-                      <span className={`absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-semibold tracking-[0.14em] uppercase px-3.5 py-1 rounded-full whitespace-nowrap ${bundle === b.id ? 'bg-sage text-white' : 'bg-ink text-cream'}`}>{b.label}</span>
+                      <span className={`absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-semibold tracking-[0.14em] uppercase px-3.5 py-1 rounded-full whitespace-nowrap ${
+                        bundle === b.id ? 'bg-sage text-white' : 'bg-ink text-cream'
+                      }`}>{b.label}</span>
                     )}
-                    {!b.featured && <div className={`text-[10px] font-medium tracking-[0.18em] uppercase mb-4 ${bundle === b.id ? 'text-cream/40' : 'text-ink/28'}`}>{b.label}</div>}
+                    {!b.featured && <div className={`text-[10px] font-medium tracking-[0.18em] uppercase mb-4 ${bundle === b.id ? 'text-cream/40':'text-ink/28'}`}>{b.label}</div>}
                     {b.featured && <div className="mb-4" />}
-                    <div className={`text-[1rem] font-semibold mb-1 ${bundle === b.id ? 'text-cream' : 'text-ink'}`}>{b.pairs}</div>
-                    <div className={`text-[12px] mb-3 line-through ${bundle === b.id ? 'text-cream/28' : 'text-ink/22'}`}>Rp {b.original}</div>
-                    <div className={`text-[1.7rem] font-bold leading-none tracking-tight mb-2.5 ${bundle === b.id ? 'text-cream' : 'text-ink'}`}>Rp {b.price}</div>
-                    <div className={`text-[12px] font-semibold ${bundle === b.id ? 'text-sage-light' : 'text-sage'}`}>{b.save}</div>
+                    <div className={`text-[1rem] font-semibold mb-1 ${bundle === b.id ? 'text-cream':'text-ink'}`}>{b.pairs}</div>
+                    <div className={`text-[12px] mb-3 line-through ${bundle === b.id ? 'text-cream/28':'text-ink/22'}`}>Rp {b.original}</div>
+                    <div className={`text-[1.7rem] font-bold leading-none tracking-tight mb-2.5 ${bundle === b.id ? 'text-cream':'text-ink'}`}>Rp {b.price}</div>
+                    <div className={`text-[12px] font-semibold ${bundle === b.id ? 'text-sage-light':'text-sage'}`}>{b.save}</div>
                   </button>
                 ))}
               </div>
             </Reveal>
 
-            {/* Size & Color — UPGRADED COLOR PICKER */}
+            {/* Size & Color */}
             <Reveal delay={0.08}>
               <div className="bg-white border border-border rounded-2xl p-7 space-y-8">
 
@@ -475,9 +431,13 @@ export default function App() {
                     <span className="text-[11px] text-ink/32 font-medium">Kebanyakan pilih M</span>
                   </div>
                   <div className="flex gap-3 flex-wrap">
-                    {['S', 'M', 'L', 'XL'].map((s) => (
+                    {['S','M','L','XL'].map(s => (
                       <button key={s} onClick={() => setSize(s)}
-                        className={`relative h-11 w-14 rounded-xl text-[13px] font-semibold border transition-all cursor-pointer ${size === s ? 'bg-ink text-cream border-ink shadow-[0_4px_16px_rgba(14,14,14,0.15)]' : 'bg-white text-ink border-border hover:border-ink/30'}`}
+                        className={`relative h-11 w-14 rounded-xl text-[13px] font-semibold border transition-all cursor-pointer ${
+                          size === s
+                            ? 'bg-ink text-cream border-ink shadow-[0_4px_16px_rgba(14,14,14,0.15)]'
+                            : 'bg-white text-ink border-border hover:border-ink/30'
+                        }`}
                       >
                         {s}
                         {s === 'M' && size !== 'M' && <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-sage" />}
@@ -487,45 +447,45 @@ export default function App() {
                   <p className="text-[11px] text-ink/28 font-medium">Universal · Ukuran sepatu 36–43</p>
                 </div>
 
-                {/* Color — Premium Image Picker */}
+                {/* Color — image tiles */}
                 <div className="space-y-5 pt-1 border-t border-border">
                   <div className="flex justify-between items-center">
                     <span className="text-[13px] font-semibold text-ink">Warna</span>
                     <span className="text-[11px] text-sage font-semibold">{selectedColor.label}</span>
                   </div>
-
                   <div className="grid grid-cols-4 gap-3">
-                    {COLOR_OPTIONS.map((c) => (
+                    {COLOR_OPTIONS.map(c => (
                       <button key={c.id} onClick={() => setColor(c.id)}
-                        className={`relative overflow-hidden rounded-xl border-2 transition-all duration-300 cursor-pointer aspect-square group ${color === c.id ? 'border-ink shadow-[0_0_0_3px_rgba(14,14,14,0.08)]' : 'border-transparent hover:border-ink/20'}`}
+                        className={`relative overflow-hidden rounded-xl border-2 transition-all duration-300 cursor-pointer aspect-square group ${
+                          color === c.id
+                            ? 'border-ink shadow-[0_0_0_3px_rgba(14,14,14,0.08)]'
+                            : 'border-transparent hover:border-ink/20'
+                        }`}
                       >
-                        <img
-                          src={c.img}
-                          alt={c.label}
-                          loading="lazy"
+                        <img src={c.img} alt={c.label} loading="lazy"
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
-                        <div className={`absolute inset-0 transition-all duration-300 ${color === c.id ? 'bg-ink/0' : 'bg-ink/10 group-hover:bg-ink/0'}`} />
+                        <div className={`absolute inset-0 transition-all duration-300 ${color === c.id ? 'bg-transparent' : 'bg-ink/10 group-hover:bg-transparent'}`} />
                         {color === c.id && (
                           <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-ink flex items-center justify-center">
-                            <Check size={11} className="text-cream" />
+                            <Check size={10} className="text-cream" />
                           </div>
                         )}
-                        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-ink/70 to-transparent px-2 py-2">
-                          <span className="text-[10px] font-semibold text-white tracking-wide block text-center leading-none">{c.label}</span>
+                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/65 to-transparent px-1.5 py-2">
+                          <span className="text-[9px] font-semibold text-white tracking-wide block text-center leading-none">{c.label}</span>
                         </div>
                       </button>
                     ))}
                   </div>
                 </div>
-
               </div>
             </Reveal>
 
             {/* CTA */}
             <Reveal delay={0.12}>
               <div className="space-y-5">
-                <motion.a href={waUrl} target="_blank" whileHover={{ scale: 1.007 }} whileTap={{ scale: 0.995 }}
+                <motion.a href={waUrl} target="_blank"
+                  whileHover={{ scale: 1.007 }} whileTap={{ scale: 0.995 }}
                   className="group w-full bg-ink text-cream py-5 rounded-2xl font-semibold text-[16px] tracking-wide flex items-center justify-center gap-3 hover:bg-ink/88 transition-colors"
                 >
                   Beli Sekarang — Rp {selected.price}
@@ -536,7 +496,9 @@ export default function App() {
                   <span className="text-ink/15">·</span>
                   <span>Pembayaran Aman</span>
                   <span className="text-ink/15">·</span>
-                  <button onClick={() => setModal(true)} className="hover:text-ink transition-colors cursor-pointer underline underline-offset-2 decoration-ink/20">Syarat & Ketentuan</button>
+                  <button onClick={() => setModal(true)} className="hover:text-ink transition-colors cursor-pointer underline underline-offset-2 decoration-ink/20">
+                    Syarat & Ketentuan
+                  </button>
                 </div>
               </div>
             </Reveal>
@@ -554,40 +516,41 @@ export default function App() {
                 <h3 className="font-display text-[1.7rem] text-ink leading-tight">Garansi Kenyamanan 10 Hari</h3>
                 <p className="text-[14px] text-ink/45 leading-relaxed max-w-xl">Coba Lomira selama 10 hari. Jika kaki Anda tidak terasa lebih sejuk dan nyaman, kami kembalikan uang Anda — tanpa banyak pertanyaan.</p>
               </div>
-              <button onClick={() => setModal(true)} className="shrink-0 text-[13px] font-semibold text-sage border border-sage/30 px-6 py-3 rounded-full hover:bg-sage hover:text-white hover:border-sage transition-all duration-300 cursor-pointer">
-                Baca S&K
-              </button>
+              <button onClick={() => setModal(true)} className="shrink-0 text-[13px] font-semibold text-sage border border-sage/30 px-6 py-3 rounded-full hover:bg-sage hover:text-white hover:border-sage transition-all duration-300 cursor-pointer">Baca S&K</button>
             </div>
           </section>
         </Reveal>
 
       </main>
 
-      {/* ── FOOTER ───────────────────────────────────── */}
+      {/* ── FOOTER ───────────────────────────────── */}
       <footer className="border-t border-border py-14 px-5 sm:px-8">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <img src="/logo_opt.png" alt="Lomira" className="h-9 w-auto opacity-45 hover:opacity-70 transition-opacity duration-300" loading="lazy" />
           <p className="text-[11px] tracking-[0.2em] uppercase text-ink/22 font-medium text-center">© 2026 Lomira Premium · All Rights Reserved</p>
           <nav className="flex gap-7">
-            {([['Koleksi', '#gallery'], ['Ulasan', '#reviews'], ['Harga', '#pricing']] as const).map(([label, href]) => (
-              <a key={href} href={href} className="text-[12px] text-ink/28 hover:text-ink transition-colors font-medium">{label}</a>
+            {([['Koleksi','#gallery'],['Ulasan','#reviews'],['Harga','#pricing']] as const).map(([l,h]) => (
+              <a key={h} href={h} className="text-[12px] text-ink/28 hover:text-ink transition-colors font-medium">{l}</a>
             ))}
           </nav>
         </div>
       </footer>
 
-      {/* ── STICKY MOBILE BAR ────────────────────────── */}
+      {/* ── STICKY MOBILE BAR ────────────────────── */}
       <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden px-4 py-3 bg-cream/96 backdrop-blur-xl border-t border-border">
         <a href={waUrl} target="_blank" className="w-full bg-ink text-cream py-4 rounded-xl flex items-center justify-center font-semibold text-[15px] tracking-wide hover:bg-ink/85 transition-colors">
           Beli Sekarang — Rp {selected.price}
         </a>
       </div>
 
-      {/* ── GUARANTEE MODAL ──────────────────────────── */}
+      {/* ── MODAL ────────────────────────────────── */}
       <AnimatePresence>
         {modal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm" onClick={() => setModal(false)}>
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 16 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 16 }} transition={{ duration: 0.22, ease: 'easeOut' }} onClick={(e) => e.stopPropagation()}
+            <motion.div
+              initial={{ opacity:0,scale:0.95,y:16 }} animate={{ opacity:1,scale:1,y:0 }}
+              exit={{ opacity:0,scale:0.95,y:16 }} transition={{ duration:0.22,ease:'easeOut' }}
+              onClick={e => e.stopPropagation()}
               className="bg-white w-full max-w-md rounded-2xl p-8 md:p-10 border border-border shadow-2xl overflow-y-auto max-h-[88vh] space-y-7"
             >
               <div className="flex justify-between items-start gap-4">
@@ -598,11 +561,11 @@ export default function App() {
                 <p className="font-semibold text-ink text-[15px] leading-relaxed">Kami sepenuhnya berdiri di balik kualitas produk kami.</p>
                 <ul className="space-y-4">
                   {[
-                    ['Uji Coba', 'Gunakan satu pasang. Produk lainnya harus tetap dalam kondisi asli dan belum dipakai.'],
-                    ['Bukti', 'Foto produk dan penjelasan singkat diperlukan untuk setiap klaim pengembalian dana.'],
-                    ['Ongkos Kirim', 'Biaya pengiriman awal tidak termasuk dalam nilai pengembalian dana.'],
-                    ['Berlaku Untuk', 'Garansi hanya berlaku untuk pembelian pertama kali dari pelanggan baru.'],
-                  ].map(([title, desc]) => (
+                    ['Uji Coba','Gunakan satu pasang. Produk lainnya harus tetap dalam kondisi asli dan belum dipakai.'],
+                    ['Bukti','Foto produk dan penjelasan singkat diperlukan untuk setiap klaim pengembalian dana.'],
+                    ['Ongkos Kirim','Biaya pengiriman awal tidak termasuk dalam nilai pengembalian dana.'],
+                    ['Berlaku Untuk','Garansi hanya berlaku untuk pembelian pertama kali dari pelanggan baru.'],
+                  ].map(([title,desc]) => (
                     <li key={title} className="flex gap-3.5">
                       <Check size={14} className="text-sage shrink-0 mt-0.5" />
                       <span><strong className="text-ink font-semibold">{title}:</strong> {desc}</span>
