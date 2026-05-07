@@ -2,40 +2,62 @@
 @import "tailwindcss";
 
 @theme {
-  /* Premium Dark Theme - Inspired by Recipe 4 & 11 */
-  --color-bg: #050805;
-  --color-card: #0c120d;
-  --color-border: rgba(46, 125, 50, 0.15);
-  --color-accent: #2e7d32;
-  --color-accent-light: #66bb6a;
-  --color-text-p: #e0e7e1;
-  --color-text-s: #a5b9a7;
+  /* MASTER Design System: Elite Bestseller Light (Minimal Beige / White / Soft Blue) */
+  --color-bg: #FCFBF9; /* Light, luxury beige/cream */
+  --color-card: #FFFFFF;
+  --color-border: rgba(0, 0, 0, 0.06);
+  --color-accent: #2E7D32; /* Rich Green for conversions */
+  --color-accent-light: #4CAF50;
+  --color-accent-blue: #E1F5FE; /* Soft blue touch */
+  --color-text-p: #2D3436; /* Crisp dark slate */
+  --color-text-s: #636E72; /* Muted stone */
 
-  /* Typography */
+  /* Typography Pairing */
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Playfair Display", ui-serif, Georgia, serif;
 
-  /* Spacing Rhythm */
+  /* Spacing */
   --spacing-container: 2rem;
   --spacing-section: 6rem;
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    @apply antialiased;
+  }
+  
   body {
-    @apply bg-bg text-text-p font-sans selection:bg-accent selection:text-white antialiased;
+    @apply bg-bg text-text-p font-sans selection:bg-accent selection:text-white;
+    background-image: 
+      radial-gradient(circle at 50% 0%, rgba(225, 245, 254, 0.4) 0%, transparent 60%),
+      url("https://www.transparenttextures.com/patterns/cream-dust.png");
+    background-attachment: fixed;
   }
 
-  h1, h2, h3 {
-    @apply tracking-tighter;
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #FAFAFA;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-accent);
+    border-radius: 10px;
   }
 }
 
 @layer utilities {
   .glass {
-    @apply backdrop-blur-xl bg-white/5 border border-white/10;
+    @apply backdrop-blur-2xl bg-white/[0.6] border border-black/[0.04];
   }
   
-  .text-balance {
-    text-wrap: balance;
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-text-p via-text-p to-text-s/70;
+  }
+
+  .shadow-premium {
+    box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.05), 0 0 40px rgba(46, 125, 50, 0.02);
   }
 }
