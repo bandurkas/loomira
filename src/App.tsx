@@ -498,24 +498,6 @@ export default function App() {
                   ))}
                 </div>
 
-                {/* Animated product preview */}
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={color}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.28, ease: EASE }}
-                    className="overflow-hidden rounded-xl h-40 bg-[#F0EFEA]"
-                  >
-                    <img
-                      src={selectedColor.preview}
-                      alt={selectedColor.label}
-                      loading="lazy"
-                      className="w-full h-full object-cover object-center"
-                    />
-                  </motion.div>
-                </AnimatePresence>
               </div>
             </div>
           </Reveal>
