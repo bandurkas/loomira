@@ -61,10 +61,10 @@ function ColorSlider({ onSelect, selected }: { onSelect: (id: string) => void; s
   };
 
   const item = SLIDER_ITEMS[active];
-  const isLight = item.id === 'White' || item.id === 'Grey' || item.id === 'Mix';
+  const isLight = item.id === 'White' || item.id === 'Grey';
 
   return (
-    <div className="relative w-full overflow-hidden border border-ink/15 rounded-2xl shadow-[0_12px_40px_rgba(14,14,14,0.13)]">
+    <div className="relative w-full overflow-hidden border-2 border-ink shadow-[8px_8px_0_#1A1A1A]">
       {/* Main slide */}
       <div
         ref={trackRef}
@@ -95,20 +95,20 @@ function ColorSlider({ onSelect, selected }: { onSelect: (id: string) => void; s
             {/* Text side */}
             <div className="flex flex-col justify-center p-8 md:p-16 gap-6">
               <div className="space-y-3">
-                <div className={`text-[11px] font-black tracking-[0.3em] uppercase ${isLight ? 'text-ink/60' : 'text-white/60'}`}>
+                <div className={`text-[11px] font-black tracking-[0.3em] uppercase ${isLight ? 'text-ink/40' : 'text-white/50'}`}>
                   Pure Cotton Rib · 5 Pasang
                 </div>
                 <h3 className={`font-display font-black text-[clamp(3rem,8vw,6rem)] leading-[0.9] uppercase tracking-tight ${isLight ? 'text-ink' : 'text-white'}`}>
                   {item.label}
                 </h3>
-                <p className={`text-[15px] font-bold ${isLight ? 'text-ink/75' : 'text-white/80'}`}>{item.sub}</p>
+                <p className={`text-[15px] font-bold ${isLight ? 'text-ink/60' : 'text-white/70'}`}>{item.sub}</p>
               </div>
 
               <button
                 onClick={() => onSelect(item.id)}
                 className={`self-start inline-flex items-center gap-2 px-6 py-3 border-2 font-black text-[13px] uppercase tracking-wider transition-all hover:-translate-y-0.5 ${
                   isLight
-                    ? 'bg-ink text-[#D1F242] border-ink shadow-[0_4px_18px_rgba(209,242,66,0.4)]'
+                    ? 'bg-ink text-[#D1F242] border-ink shadow-[4px_4px_0_#D1F242]'
                     : 'bg-[#D1F242] text-ink border-ink shadow-[4px_4px_0_rgba(255,255,255,0.3)]'
                 }`}
               >
@@ -134,26 +134,26 @@ function ColorSlider({ onSelect, selected }: { onSelect: (id: string) => void; s
       {/* Arrow nav */}
       <button
         onClick={() => goTo(active - 1)}
-        className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-ink/80 border border-ink/20 flex items-center justify-center rounded-xl backdrop-blur-sm shadow-[0_3px_14px_rgba(209,242,66,0.35)] hover:-translate-y-[calc(50%+2px)] transition-transform z-10"
+        className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-ink border-2 border-ink flex items-center justify-center shadow-[3px_3px_0_#D1F242] hover:-translate-y-[calc(50%+2px)] transition-transform z-10"
         aria-label="Previous"
       >
         <ArrowRight size={18} strokeWidth={3} className="text-[#D1F242] rotate-180" />
       </button>
       <button
         onClick={() => goTo(active + 1)}
-        className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-ink/80 border border-ink/20 flex items-center justify-center rounded-xl backdrop-blur-sm shadow-[0_3px_14px_rgba(209,242,66,0.35)] hover:-translate-y-[calc(50%+2px)] transition-transform z-10"
+        className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-ink border-2 border-ink flex items-center justify-center shadow-[3px_3px_0_#D1F242] hover:-translate-y-[calc(50%+2px)] transition-transform z-10"
         aria-label="Next"
       >
         <ArrowRight size={18} strokeWidth={3} className="text-[#D1F242]" />
       </button>
 
       {/* Thumbnail strip */}
-      <div className="grid grid-cols-4 border-t border-ink/20">
+      <div className="grid grid-cols-4 border-t-2 border-ink">
         {SLIDER_ITEMS.map((s, i) => (
           <button
             key={s.id}
             onClick={() => goTo(i)}
-            className={`relative py-4 px-3 flex flex-col items-center gap-2 border-r last:border-r-0 border-ink/20 transition-all ${
+            className={`relative py-4 px-3 flex flex-col items-center gap-2 border-r-2 last:border-r-0 border-ink transition-all ${
               i === active ? 'bg-[#D1F242]' : 'bg-white hover:bg-[#D1F242]/20'
             }`}
           >
@@ -244,7 +244,7 @@ export default function App() {
               <a key={h} href={h} className="text-[12px] font-medium text-ink/42 hover:text-ink transition-colors tracking-[0.04em]">{l}</a>
             ))}
           </nav>
-          <a href="#pricing" className="text-[12px] font-black uppercase bg-[#D1F242] text-ink px-5 py-2.5 border-2 border-ink shadow-[0_6px_20px_rgba(14,14,14,0.10)] hover:-translate-y-0.5 transition-all tracking-wider">
+          <a href="#pricing" className="text-[12px] font-black uppercase bg-[#D1F242] text-ink px-5 py-2.5 border-2 border-ink shadow-[4px_4px_0_#1A1A1A] hover:-translate-y-0.5 transition-all tracking-wider">
             Beli Sekarang
           </a>
         </div>
@@ -262,7 +262,7 @@ export default function App() {
         <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-10 max-w-6xl mx-auto">
           <motion.div initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.7, ease:EASE }}>
             <a href="#pricing"
-              className="group inline-flex items-center gap-3 bg-[#D1F242] text-ink px-8 py-4 border-2 border-ink shadow-[0_8px_28px_rgba(14,14,14,0.11)] font-black text-[16px] uppercase tracking-[0.08em] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(14,14,14,0.13)] transition-all">
+              className="group inline-flex items-center gap-3 bg-[#D1F242] text-ink px-8 py-4 border-2 border-ink shadow-[6px_6px_0_#1A1A1A] font-black text-[16px] uppercase tracking-[0.08em] hover:-translate-y-1 hover:shadow-[8px_8px_0_#1A1A1A] transition-all">
               AMANKAN PROMONYA
               <ArrowRight size={18} strokeWidth={3} className="group-hover:translate-x-1 transition-transform" />
             </a>
@@ -289,7 +289,7 @@ export default function App() {
         {/* ── PROBLEM / SOLUTION ─── BRUTALIST */}
         <section className="py-16 md:py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <Reveal className="space-y-6">
-            <span className="inline-block bg-ink text-[#D1F242] font-black px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] rounded-lg shadow-[0_4px_18px_rgba(209,242,66,0.4)]">Masalah Umum</span>
+            <span className="inline-block bg-ink text-[#D1F242] font-black px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] shadow-[4px_4px_0_#D1F242]">Masalah Umum</span>
             <h2 className="font-display font-black text-[clamp(2.5rem,5vw,4rem)] leading-[1] text-ink uppercase tracking-tight">
               KAKI GERAH BUKAN<br />HAL YANG WAJAR.
             </h2>
@@ -304,15 +304,15 @@ export default function App() {
           </Reveal>
 
           <Reveal delay={0.12} className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div className="bg-white border border-ink/20 p-7 space-y-4 rounded-2xl shadow-[0_8px_28px_rgba(14,14,14,0.11)]">
-              <div className="w-10 h-10 bg-ink flex items-center justify-center border border-ink/20 rounded-xl"><X size={18} className="text-white" /></div>
+            <div className="bg-white border-2 border-ink p-7 space-y-4 shadow-[6px_6px_0_#1A1A1A]">
+              <div className="w-10 h-10 bg-ink flex items-center justify-center border-2 border-ink"><X size={18} className="text-white" /></div>
               <div className="space-y-2">
                 <h4 className="font-black text-ink text-[14px] uppercase">Kaos Kaki Biasa</h4>
                 <p className="text-[13px] text-ink/60 leading-relaxed font-bold">Bahan sintetis, panas, mudah melar, berkeringat, dan bau menjelang siang.</p>
               </div>
             </div>
-            <div className="bg-[#D1F242] border border-ink/20 p-7 space-y-4 rounded-2xl shadow-[0_8px_28px_rgba(14,14,14,0.11)]">
-              <div className="w-10 h-10 bg-ink flex items-center justify-center border border-ink/20 rounded-xl"><Check size={18} className="text-[#D1F242]" /></div>
+            <div className="bg-[#D1F242] border-2 border-ink p-7 space-y-4 shadow-[6px_6px_0_#1A1A1A]">
+              <div className="w-10 h-10 bg-ink flex items-center justify-center border-2 border-ink"><Check size={18} className="text-[#D1F242]" /></div>
               <div className="space-y-2">
                 <h4 className="font-black text-ink text-[14px] uppercase">Lomira Air Mesh</h4>
                 <p className="text-[13px] text-ink/80 leading-relaxed font-bold">85% katun premium, ventilasi 360°, cepat kering, nyaman seharian penuh.</p>
@@ -324,7 +324,7 @@ export default function App() {
         {/* ── FEATURES ─── BRUTALIST */}
         <section id="features" className="py-16 md:py-24 space-y-12">
           <Reveal className="max-w-2xl space-y-4">
-            <span className="inline-block bg-ink text-[#D1F242] font-black px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] rounded-lg shadow-[0_4px_18px_rgba(209,242,66,0.4)]">Keunggulan</span>
+            <span className="inline-block bg-ink text-[#D1F242] font-black px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] shadow-[4px_4px_0_#D1F242]">Keunggulan</span>
             <h2 className="font-display font-black text-[clamp(2.5rem,5vw,4rem)] leading-[1] text-ink uppercase tracking-tight">
               DIDESAIN UNTUK<br /><span className="text-ink/30">KENYAMANAN MAKSIMAL.</span>
             </h2>
@@ -333,8 +333,8 @@ export default function App() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {FEATURES.map((f,i) => (
               <Reveal key={i} delay={i * 0.07}>
-                <div className="group bg-ink border border-ink/20 p-8 space-y-8 hover:-translate-y-2 transition-all duration-300 h-full rounded-2xl shadow-[0_8px_28px_rgba(209,242,66,0.45)]">
-                  <div className="w-16 h-16 bg-[#D1F242] flex items-center justify-center border border-ink/20 rounded-xl shadow-[0_6px_20px_rgba(14,14,14,0.10)] group-hover:scale-110 transition-transform duration-300">
+                <div className="group bg-ink border-2 border-ink p-8 space-y-8 hover:-translate-y-2 transition-all duration-300 h-full shadow-[8px_8px_0_#D1F242]">
+                  <div className="w-16 h-16 bg-[#D1F242] flex items-center justify-center border-2 border-ink shadow-[4px_4px_0_#1A1A1A] group-hover:scale-110 transition-transform duration-300">
                     <f.icon size={28} strokeWidth={2.5} className="text-ink" />
                   </div>
                   <div className="space-y-3">
@@ -351,7 +351,7 @@ export default function App() {
         <section id="gallery" className="py-16 md:py-24">
           <Reveal className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
             <div className="space-y-4">
-              <span className="inline-block bg-ink text-[#D1F242] font-black px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] rounded-lg shadow-[0_4px_18px_rgba(209,242,66,0.4)]">Koleksi</span>
+              <span className="inline-block bg-ink text-[#D1F242] font-black px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] shadow-[4px_4px_0_#D1F242]">Koleksi</span>
               <h2 className="font-display font-black text-[clamp(2.5rem,4vw,4.5rem)] leading-[1] uppercase text-ink tracking-tight">
                 KATUN PREMIUM.<br /><span className="text-ink/30">MINIMALIS & EVERYDAY.</span>
               </h2>
@@ -366,7 +366,7 @@ export default function App() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 lg:h-[540px]">
 
               {/* LEFT — grey pack, tall portrait */}
-              <div className="lg:col-span-5 relative overflow-hidden bg-[#ECEAE7] group cursor-pointer aspect-[4/5] lg:aspect-auto border border-ink/15 rounded-2xl shadow-[0_12px_40px_rgba(14,14,14,0.13)]">
+              <div className="lg:col-span-5 relative overflow-hidden bg-[#ECEAE7] group cursor-pointer aspect-[4/5] lg:aspect-auto border-2 border-ink shadow-[8px_8px_0_#1A1A1A]">
                 <img src="/real_assets/pack_grey.png" alt="Grey Edition" loading="lazy" decoding="async"
                   className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700" />
                 <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-ink/70 via-ink/20 to-transparent" />
@@ -380,7 +380,7 @@ export default function App() {
               <div className="lg:col-span-7 grid grid-rows-[3fr_2fr] gap-3.5 lg:h-[540px]">
 
                 {/* Right top — white pack landscape */}
-                <div className="relative overflow-hidden bg-[#F0EFEA] group cursor-pointer aspect-[16/7] lg:aspect-auto border border-ink/15 rounded-2xl shadow-[0_8px_28px_rgba(14,14,14,0.11)]">
+                <div className="relative overflow-hidden bg-[#F0EFEA] group cursor-pointer aspect-[16/7] lg:aspect-auto border-2 border-ink shadow-[6px_6px_0_#1A1A1A]">
                   <img src="/real_assets/pack_white_b.jpg" alt="White Edition" loading="lazy" decoding="async"
                     className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-r from-ink/55 via-ink/15 to-transparent" />
@@ -392,7 +392,7 @@ export default function App() {
 
                 {/* Right bottom — 2 equal cards */}
                 <div className="grid grid-cols-2 gap-3.5">
-                  <div className="relative overflow-hidden bg-[#ECEAE5] group cursor-pointer aspect-square lg:aspect-auto border border-ink/15 rounded-2xl shadow-[0_6px_20px_rgba(14,14,14,0.10)]">
+                  <div className="relative overflow-hidden bg-[#ECEAE5] group cursor-pointer aspect-square lg:aspect-auto border-2 border-ink shadow-[4px_4px_0_#1A1A1A]">
                     <img src="/real_assets/b_4_opt.jpg" alt="Premium Ankle Fit" loading="lazy" decoding="async"
                       className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-700" />
                     <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-ink/60 to-transparent" />
@@ -400,7 +400,7 @@ export default function App() {
                       <p className="font-display font-black text-white uppercase text-[0.95rem] leading-tight">Ankle Fit</p>
                     </div>
                   </div>
-                  <div className="relative overflow-hidden bg-[#EDE8DF] group cursor-pointer aspect-square lg:aspect-auto border border-ink/15 rounded-2xl shadow-[0_6px_20px_rgba(14,14,14,0.10)]">
+                  <div className="relative overflow-hidden bg-[#EDE8DF] group cursor-pointer aspect-square lg:aspect-auto border-2 border-ink shadow-[4px_4px_0_#1A1A1A]">
                     <img src="/real_assets/product_stack.png" alt="5 Pasang Kaos Kaki Premium" loading="lazy" decoding="async"
                       className="w-full h-full object-cover object-center group-hover:scale-[1.05] transition-transform duration-700" />
                     <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-ink/55 to-transparent" />
@@ -415,7 +415,7 @@ export default function App() {
 
           {/* Spec strip — Uniqlo style */}
           <Reveal delay={0.08} className="mt-3.5">
-            <div className="grid grid-cols-2 md:grid-cols-4 overflow-hidden border border-ink/20 bg-[#D1F242] rounded-2xl shadow-[0_6px_20px_rgba(14,14,14,0.10)]">
+            <div className="grid grid-cols-2 md:grid-cols-4 overflow-hidden border-2 border-ink bg-[#D1F242] shadow-[4px_4px_0_#1A1A1A]">
               {PRODUCT_SPECS.map((s,i) => (
                 <div key={i} className="flex flex-col gap-1.5 px-6 py-5 border-r border-b md:border-b-0 last:border-r-0 border-ink">
                   <span className="text-[10px] font-black tracking-[0.16em] uppercase text-ink/50">{s.label}</span>
@@ -429,14 +429,14 @@ export default function App() {
         {/* ── REVIEWS ── BRUTALIST */}
         <section id="reviews" className="py-16 md:py-24 space-y-12">
           <Reveal className="space-y-4">
-            <span className="inline-block bg-ink text-[#D1F242] font-black px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] rounded-lg shadow-[0_4px_18px_rgba(209,242,66,0.4)]">Ulasan</span>
+            <span className="inline-block bg-ink text-[#D1F242] font-black px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] shadow-[4px_4px_0_#D1F242]">Ulasan</span>
             <h2 className="font-display font-black text-[clamp(2.5rem,5vw,4rem)] leading-[1] text-ink uppercase tracking-tight">APA KATA MEREKA.</h2>
           </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {REVIEWS.map((r,i) => (
               <Reveal key={i} delay={i * 0.09}>
-                <div className="bg-[#F4F4F4] border border-ink/15 p-7 space-y-5 h-full flex flex-col rounded-2xl shadow-[0_6px_20px_rgba(14,14,14,0.10)] hover:-translate-y-1 transition-all duration-300">
+                <div className="bg-[#F4F4F4] border-2 border-ink p-7 space-y-5 h-full flex flex-col shadow-[4px_4px_0_#1A1A1A] hover:-translate-y-1 transition-all duration-300">
                   <div className="flex gap-0.5">{[...Array(r.stars)].map((_,j) => <Star key={j} size={13} className="fill-[#D1F242] text-[#D1F242]" />)}</div>
                   <p className="text-[1.02rem] text-ink/80 leading-[1.72] flex-1 font-bold">"{r.text}"</p>
                   <div className="flex items-center justify-between pt-4 border-t-2 border-ink">
@@ -454,7 +454,7 @@ export default function App() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
             <Reveal className="space-y-6 lg:sticky lg:top-24">
-              <span className="inline-block bg-ink text-[#D1F242] font-black px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] rounded-lg shadow-[0_4px_18px_rgba(209,242,66,0.4)]">Perbandingan</span>
+              <span className="inline-block bg-ink text-[#D1F242] font-black px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] shadow-[4px_4px_0_#D1F242]">Perbandingan</span>
               <h2 className="font-display font-black text-[clamp(2.5rem,5vw,4rem)] leading-[1] text-ink uppercase tracking-tight">
                 LOMIRA VS<br />LAINNYA.
               </h2>
@@ -462,14 +462,14 @@ export default function App() {
                 Bukan sekadar klaim. Setiap keunggulan Lomira dirancang dengan bahan dan teknologi yang dapat Anda rasakan sejak hari pertama.
               </p>
               <a href="#pricing"
-                className="inline-flex items-center gap-2 bg-[#D1F242] text-ink px-6 py-3 border border-ink/30 rounded-xl shadow-[0_6px_20px_rgba(14,14,14,0.10)] font-black text-[13px] uppercase tracking-wider hover:-translate-y-0.5 transition-all group">
+                className="inline-flex items-center gap-2 bg-[#D1F242] text-ink px-6 py-3 border-2 border-ink shadow-[4px_4px_0_#1A1A1A] font-black text-[13px] uppercase tracking-wider hover:-translate-y-0.5 transition-all group">
                 Lihat Penawaran
                 <ArrowRight size={13} strokeWidth={3} className="group-hover:translate-x-0.5 transition-transform duration-200" />
               </a>
             </Reveal>
 
             <Reveal delay={0.1}>
-              <div className="bg-white border border-ink/15 overflow-hidden rounded-2xl shadow-[0_12px_40px_rgba(14,14,14,0.13)]">
+              <div className="bg-white border-2 border-ink overflow-hidden shadow-[8px_8px_0_#1A1A1A]">
                 <div className="grid grid-cols-12 bg-ink px-6 py-4">
                   <div className="col-span-6 text-[10px] font-black tracking-[0.18em] uppercase text-white/60">Fitur</div>
                   <div className="col-span-3 text-center text-[10px] font-black tracking-[0.18em] uppercase text-[#D1F242]">Lomira</div>
@@ -479,12 +479,12 @@ export default function App() {
                   <div key={i} className="grid grid-cols-12 px-6 py-4 border-b-2 last:border-b-0 border-ink/10 items-center hover:bg-[#D1F242]/10 transition-colors">
                     <div className="col-span-6 text-[14px] text-ink/80 font-bold">{feat}</div>
                     <div className="col-span-3 flex justify-center">
-                      <div className="w-7 h-7 bg-[#D1F242] flex items-center justify-center border border-ink/20 rounded-lg">
+                      <div className="w-7 h-7 bg-[#D1F242] flex items-center justify-center border-2 border-ink">
                         <Check size={13} strokeWidth={3} className="text-ink" />
                       </div>
                     </div>
                     <div className="col-span-3 flex justify-center">
-                      <div className="w-7 h-7 bg-ink/5 flex items-center justify-center border border-ink/10 rounded-lg">
+                      <div className="w-7 h-7 bg-ink/5 flex items-center justify-center border-2 border-ink/20">
                         <X size={13} strokeWidth={3} className="text-ink/30" />
                       </div>
                     </div>
@@ -500,7 +500,7 @@ export default function App() {
           <Reveal className="space-y-8">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
               <div className="space-y-3">
-                <span className="inline-block bg-ink text-[#D1F242] font-black px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] rounded-lg shadow-[0_4px_18px_rgba(209,242,66,0.4)]">Pilih Warna</span>
+                <span className="inline-block bg-ink text-[#D1F242] font-black px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] shadow-[4px_4px_0_#D1F242]">Pilih Warna</span>
                 <h2 className="font-display font-black text-[clamp(2rem,4vw,3.5rem)] leading-[1] text-ink uppercase tracking-tight">4 PILIHAN WARNA.</h2>
               </div>
               <p className="text-[13px] text-ink/50 font-bold uppercase tracking-wide">Pure Cotton Rib · 5 Pasang per Pack</p>
@@ -514,7 +514,7 @@ export default function App() {
         {/* ── PRICING ── BRUTALIST ───────────────── */}
         <section id="pricing" className="py-16 md:py-24 space-y-12">
           <Reveal className="space-y-4">
-            <span className="inline-block bg-ink text-[#D1F242] font-black px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] rounded-lg shadow-[0_4px_18px_rgba(209,242,66,0.4)]">Penawaran</span>
+            <span className="inline-block bg-ink text-[#D1F242] font-black px-4 py-1.5 text-[11px] uppercase tracking-[0.2em] shadow-[4px_4px_0_#D1F242]">Penawaran</span>
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
               <h2 className="font-display font-black text-[clamp(2.5rem,5vw,4rem)] leading-[1] text-ink uppercase tracking-tight">PILIH PAKET ANDA.</h2>
               <p className="text-[14px] text-ink/60 max-w-xs leading-relaxed md:text-right font-bold uppercase">
@@ -528,10 +528,10 @@ export default function App() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {BUNDLES.map(b => (
                 <button key={b.id} onClick={() => setBundle(b.id)}
-                  className={`relative p-7 border border-ink/20 text-left transition-all duration-300 cursor-pointer hover:-translate-y-1 rounded-2xl ${
+                  className={`relative p-7 border-2 border-ink text-left transition-all duration-300 cursor-pointer hover:-translate-y-1 ${
                     bundle === b.id
-                      ? 'bg-ink shadow-[0_8px_28px_rgba(209,242,66,0.45)]'
-                      : 'bg-white shadow-[0_8px_28px_rgba(14,14,14,0.11)] hover:shadow-[0_8px_28px_rgba(209,242,66,0.45)]'
+                      ? 'bg-ink shadow-[8px_8px_0_#D1F242]'
+                      : 'bg-white shadow-[6px_6px_0_#1A1A1A] hover:shadow-[8px_8px_0_#D1F242]'
                   }`}
                 >
                   {b.featured && (
@@ -556,7 +556,7 @@ export default function App() {
 
           {/* Size + Color — full width */}
           <Reveal delay={0.07}>
-            <div className="bg-white border border-ink/15 p-7 space-y-7 rounded-2xl shadow-[0_8px_28px_rgba(14,14,14,0.11)]">
+            <div className="bg-white border-2 border-ink p-7 space-y-7 shadow-[6px_6px_0_#1A1A1A]">
 
               {/* Size */}
               <div className="space-y-4">
@@ -567,9 +567,9 @@ export default function App() {
                 <div className="flex gap-3 flex-wrap">
                   {['S','M','L','XL'].map(s => (
                     <button key={s} onClick={() => setSize(s)}
-                      className={`relative h-11 min-w-[52px] px-4 text-[13px] font-black border border-ink/25 transition-all cursor-pointer uppercase rounded-xl ${
+                      className={`relative h-11 min-w-[52px] px-4 text-[13px] font-black border-2 border-ink transition-all cursor-pointer uppercase ${
                         size === s
-                          ? 'bg-ink text-cream shadow-[0_3px_14px_rgba(209,242,66,0.35)]'
+                          ? 'bg-ink text-cream shadow-[3px_3px_0_#D1F242]'
                           : 'bg-white text-ink hover:bg-[#D1F242]/20'
                       }`}
                     >
@@ -624,7 +624,7 @@ export default function App() {
             <div className="space-y-4">
               <motion.a href={waUrl} target="_blank"
                 whileHover={{ scale: 1.006 }} whileTap={{ scale: 0.996 }}
-                className="group w-full bg-[#D1F242] text-ink py-[18px] border border-ink/30 rounded-xl shadow-[0_8px_28px_rgba(14,14,14,0.11)] font-black text-[18px] uppercase tracking-[0.05em] flex items-center justify-center gap-3 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(14,14,14,0.13)] transition-all"
+                className="group w-full bg-[#D1F242] text-ink py-[18px] border-2 border-ink shadow-[6px_6px_0_#1A1A1A] font-black text-[18px] uppercase tracking-[0.05em] flex items-center justify-center gap-3 hover:-translate-y-0.5 hover:shadow-[8px_8px_0_#1A1A1A] transition-all"
               >
                 BELI SEKARANG — Rp {selected.price}
                 <ArrowRight size={18} strokeWidth={3} className="group-hover:translate-x-1 transition-transform duration-200" />
@@ -650,8 +650,8 @@ export default function App() {
         {/* ── GUARANTEE ── unified rhythm with top breathing */}
         <Reveal>
           <section className="pt-6 pb-16 md:pt-8 md:pb-24">
-            <div className="bg-white border border-ink/15 px-8 md:px-12 py-10 flex flex-col md:flex-row rounded-2xl items-center gap-7 text-center md:text-left shadow-[0_8px_28px_rgba(209,242,66,0.45)]">
-              <div className="w-16 h-16 min-w-[64px] min-h-[64px] bg-[#D1F242] flex items-center justify-center border border-ink/20 rounded-2xl shadow-[0_6px_20px_rgba(14,14,14,0.10)]">
+            <div className="bg-white border-2 border-ink px-8 md:px-12 py-10 flex flex-col md:flex-row items-center gap-7 text-center md:text-left shadow-[8px_8px_0_#D1F242]">
+              <div className="w-16 h-16 min-w-[64px] min-h-[64px] bg-[#D1F242] flex items-center justify-center border-2 border-ink shadow-[4px_4px_0_#1A1A1A]">
                 <ShieldCheck size={28} strokeWidth={2.5} className="text-ink" />
               </div>
               <div className="flex-1 space-y-2">
@@ -661,7 +661,7 @@ export default function App() {
                 </p>
               </div>
               <button onClick={() => setModal(true)}
-                className="shrink-0 text-[12px] font-black text-ink border border-ink/25 px-5 py-2.5 uppercase tracking-wider rounded-lg hover:bg-[#D1F242] hover:shadow-[0_6px_20px_rgba(14,14,14,0.10)] transition-all duration-300 cursor-pointer">
+                className="shrink-0 text-[12px] font-black text-ink border-2 border-ink px-5 py-2.5 uppercase tracking-wider hover:bg-[#D1F242] hover:shadow-[4px_4px_0_#1A1A1A] transition-all duration-300 cursor-pointer">
                 Baca S&K
               </button>
             </div>
@@ -688,7 +688,7 @@ export default function App() {
       {/* ── STICKY MOBILE BAR ── BRUTALIST ───────── */}
       <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden px-4 py-3.5 bg-ink border-t-2 border-[#D1F242]">
         <a href={waUrl} target="_blank"
-          className="w-full bg-[#D1F242] text-ink py-4 flex items-center justify-center font-black text-[15px] uppercase tracking-[0.05em] border border-ink/30 rounded-xl shadow-[0_6px_20px_rgba(14,14,14,0.10)]">
+          className="w-full bg-[#D1F242] text-ink py-4 flex items-center justify-center font-black text-[15px] uppercase tracking-[0.05em] border-2 border-ink shadow-[4px_4px_0_#1A1A1A]">
           BELI SEKARANG — Rp {selected.price}
         </a>
       </div>
