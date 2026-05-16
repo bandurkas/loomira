@@ -6,3 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
+.node_local/
+node.tar.gz
+node_install.pkg
